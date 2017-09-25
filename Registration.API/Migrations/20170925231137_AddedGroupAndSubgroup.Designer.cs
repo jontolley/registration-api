@@ -11,9 +11,10 @@ using System;
 namespace Registration.API.Migrations
 {
     [DbContext(typeof(RegistrationContext))]
-    partial class RegistrationContextModelSnapshot : ModelSnapshot
+    [Migration("20170925231137_AddedGroupAndSubgroup")]
+    partial class AddedGroupAndSubgroup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

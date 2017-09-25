@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Registration.API.Entities
@@ -14,19 +13,30 @@ namespace Registration.API.Entities
             }
 
             // init seed data
-            var events = new List<Event>()
+            var seedEvent = new Event
             {
-                new Event()
-                {
-                    Name = "Encampment 2018",
-                    Description = "The encampment of 2018",
-                    Location = "Camp Cowels",
-                    StartDate = new DateTime(2018, 8, 6),
-                    EndDate = new DateTime(2018, 8, 12)
-                }
+                Name = "Encampment 2018",
+                Description = "The encampment of 2018",
+                Location = "Camp Cowels",
+                StartDate = new DateTime(2018, 8, 6),
+                EndDate = new DateTime(2018, 8, 12)
             };
 
-            context.Events.AddRange(events);
+            var group = new Group
+            {
+                Name = "Spokane East Stake"
+            };
+
+            var subgroup = new Subgroup
+            {
+                Name = "Bowdish Ward",
+                Group = group
+            };
+
+            context.Events.Add(seedEvent);
+            context.Groups.Add(group);
+            context.Subgroups.Add(subgroup);
+
             context.SaveChanges();
         }
     }

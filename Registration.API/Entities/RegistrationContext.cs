@@ -11,5 +11,7 @@ namespace Registration.API.Entities
         }
 
         public DbSet<Event> Events { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Subgroup> Subgroups { get; set; }
     }
 }
