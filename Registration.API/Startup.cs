@@ -41,11 +41,27 @@ namespace Registration.API
 
             registrationContext.EnsureSeedDataForContext();
 
+            app.UseStatusCodePages();
+
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<Entities.Event, Models.EventDto>();
-            });
+                cfg.CreateMap<Entities.Event, Models.EventForUpdateDto>();
+                cfg.CreateMap<Models.EventForCreationDto, Entities.Event>();
+                cfg.CreateMap<Models.EventForUpdateDto, Entities.Event>();
 
+                cfg.CreateMap<Entities.Group, Models.GroupDto>();
+                cfg.CreateMap<Entities.Group, Models.GroupWithSubgroupsDto>();
+                cfg.CreateMap<Entities.Group, Models.GroupForUpdateDto>();
+                cfg.CreateMap<Models.GroupForCreationDto, Entities.Group>();
+                cfg.CreateMap<Models.GroupForUpdateDto, Entities.Group>();
+
+                cfg.CreateMap<Entities.Subgroup, Models.SubgroupDto>();
+                cfg.CreateMap<Entities.Subgroup, Models.SubgroupForUpdateDto>();
+                cfg.CreateMap<Models.SubgroupForCreationDto, Entities.Subgroup>();
+                cfg.CreateMap<Models.SubgroupForUpdateDto, Entities.Subgroup>();
+            });
+            
             app.UseMvc();
         }
     }
