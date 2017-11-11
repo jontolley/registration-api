@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Registration.API.Entities;
 using Registration.API.Services;
+using System.Reflection;
 
 namespace Registration.API
 {
@@ -23,7 +26,35 @@ namespace Registration.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = "https://tolleyfam.auth0.com/";
+                options.Audience = "http://localhost:19671";
+                options.SaveToken = true;
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Over21", policy => policy.Requirements.Add(new MinimumAgeRequirement(21)));
+            });
+
+            services.AddSingleton<IAuthorizationHandler, MinimumAgeHandler>();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder.WithOrigins("http://authdemo.dev:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                );
+            });
 
             var connectionString = Startup.Configuration["connectionStrings:registrationDBConnectionString"];
             services.AddDbContext<RegistrationContext>(o => o.UseSqlServer(connectionString));
@@ -38,10 +69,14 @@ namespace Registration.API
             {
                 app.UseDeveloperExceptionPage();
             }
+            
+            app.UseCors("AllowSpecificOrigin");
 
             registrationContext.EnsureSeedDataForContext();
 
             app.UseStatusCodePages();
+
+            app.UseAuthentication();
 
             Mapper.Initialize(cfg =>
             {

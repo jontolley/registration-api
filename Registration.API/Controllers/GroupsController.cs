@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Registration.API.Models;
@@ -17,6 +18,7 @@ namespace Registration.API.Controllers
             _registrationRepository = registrationRepository;
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult GetGroups()
         {
@@ -26,6 +28,7 @@ namespace Registration.API.Controllers
             return Ok(groupDtos);
         }
 
+        [Authorize]
         [HttpGet("{id}", Name = "GetGroup")]
         public IActionResult GetGroup(int id, bool includeSubgroups = false)
         {
@@ -46,6 +49,7 @@ namespace Registration.API.Controllers
             return Ok(groupResult);
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult CreateGroup([FromBody] GroupForCreationDto groupDto)
         {
@@ -74,6 +78,7 @@ namespace Registration.API.Controllers
             { id = createdGroupToReturn.Id }, createdGroupToReturn);
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public IActionResult UpdateGroup(int id,
             [FromBody] GroupForUpdateDto groupDto)
@@ -104,6 +109,7 @@ namespace Registration.API.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpPatch("{id}")]
         public IActionResult PartiallyUpdateGroup(int id,
             [FromBody] JsonPatchDocument<GroupForUpdateDto> patchDoc)
@@ -138,6 +144,7 @@ namespace Registration.API.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public IActionResult DeleteGroup(int id)
         {

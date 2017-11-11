@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Registration.API.Models;
@@ -17,15 +18,23 @@ namespace Registration.API.Controllers
             _registrationRepository = registrationRepository;
         }
 
+        //[Authorize(Roles = "admin")]
+        [Authorize(Policy = "Over21")]
+        //[Authorize]
         [HttpGet]
         public IActionResult GetEvents()
         {
+            var x = User;
+
+            var y = HttpContext.User;
+
             var eventEntities = _registrationRepository.GetEvents();
             var eventDtos = Mapper.Map<IEnumerable<EventDto>>(eventEntities);
 
             return Ok(eventDtos);
         }
 
+        [Authorize]
         [HttpGet("{id}", Name = "GetEvent")]
         public IActionResult GetEvent(int id)
         {
@@ -40,6 +49,7 @@ namespace Registration.API.Controllers
             return Ok(eventResult);
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult CreateEvent([FromBody] EventForCreationDto eventDto)
         {
@@ -68,6 +78,7 @@ namespace Registration.API.Controllers
             { id = createdEventToReturn.Id }, createdEventToReturn);
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public IActionResult UpdateEvent(int id,
             [FromBody] EventForUpdateDto eventDto)
@@ -98,6 +109,7 @@ namespace Registration.API.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpPatch("{id}")]
         public IActionResult PartiallyUpdateEvent(int id,
             [FromBody] JsonPatchDocument<EventForUpdateDto> patchDoc)
@@ -132,6 +144,7 @@ namespace Registration.API.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public IActionResult DeleteEvent(int id)
         {

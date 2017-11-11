@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Registration.API.Models;
@@ -18,6 +19,7 @@ namespace Registration.API.Controllers
             _registrationRepository = registrationRepository;
         }
 
+        [Authorize]
         [HttpGet("{groupId}/subgroups")]
         public IActionResult GetSubgroups(int groupId)
         {
@@ -38,7 +40,8 @@ namespace Registration.API.Controllers
                 return StatusCode(500, "A problem happened while handling your request.");
             }
         }
-        
+
+        [Authorize]
         [HttpGet("{groupId}/subgroups/{id}", Name = "GetSubgroup")]
         public IActionResult GetSubgroup(int groupId, int id)
         {
@@ -58,6 +61,7 @@ namespace Registration.API.Controllers
             return Ok(subgroupResult);
         }
 
+        [Authorize]
         [HttpPost("{groupId}/subgroups")]
         public IActionResult CreateSubgroup(int groupId, [FromBody] SubgroupForCreationDto subgroupDto)
         {
@@ -91,6 +95,7 @@ namespace Registration.API.Controllers
             { id = createdSubgroupToReturn.Id }, createdSubgroupToReturn);
         }
 
+        [Authorize]
         [HttpPut("{groupId}/subgroups/{id}")]
         public IActionResult UpdateSubgroup(int groupId, int id,
             [FromBody] SubgroupForUpdateDto subgroupDto)
@@ -126,6 +131,7 @@ namespace Registration.API.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpPatch("{groupId}/subgroups/{id}")]
         public IActionResult PartiallyUpdateSubgroup(int groupId, int id,
             [FromBody] JsonPatchDocument<SubgroupForUpdateDto> patchDoc)
@@ -165,6 +171,7 @@ namespace Registration.API.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpDelete("{groupId}/subgroups/{id}")]
         public IActionResult DeleteSubgroup(int groupId, int id)
         {
