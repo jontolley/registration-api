@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Registration.API.Entities;
 using Registration.API.Services;
-using System.Reflection;
 
 namespace Registration.API
 {
@@ -95,6 +94,14 @@ namespace Registration.API
                 cfg.CreateMap<Entities.Subgroup, Models.SubgroupForUpdateDto>();
                 cfg.CreateMap<Models.SubgroupForCreationDto, Entities.Subgroup>();
                 cfg.CreateMap<Models.SubgroupForUpdateDto, Entities.Subgroup>();
+
+                cfg.CreateMap<Entities.User, Models.UserDto>();
+                cfg.CreateMap<Entities.User, Models.UserWithRolesDto>();
+                cfg.CreateMap<Entities.User, Models.UserForUpdateDto>();
+                cfg.CreateMap<Models.UserForCreationDto, Entities.User>();
+                cfg.CreateMap<Models.UserForUpdateDto, Entities.User>();
+
+                cfg.CreateMap<Entities.Role, Models.RoleDto>();
             });
             
             app.UseMvc();

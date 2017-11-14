@@ -101,6 +101,57 @@ namespace Registration.API.Services
         }
         #endregion Subgroup methods
 
+        #region User methods
+        public bool UserExists(int userId)
+        {
+            return _context.Users.Any(e => e.Id == userId);
+        }
+
+        public bool UserExists(string subscriberId)
+        {
+            return _context.Users.Any(e => e.SubscriberId == subscriberId);
+        }
+
+        public IEnumerable<User> GetUsers()
+        {
+            return _context.Users.OrderBy(e => e.Name).ToList();
+        }
+
+        public User GetUser(int userId, bool includeRoles)
+        {
+            if (includeRoles)
+            {
+                //return _context.Users.Include(g => g.)
+                //    .Where(g => g.Id == userId).FirstOrDefault();
+                throw new System.NotImplementedException();
+            }
+
+            return _context.Users.Where(g => g.Id == userId).FirstOrDefault();
+        }
+
+        public User GetUser(string subscriberId, bool includeRoles)
+        {
+            if (includeRoles)
+            {
+                //return _context.Users.Include(g => g.)
+                //    .Where(g => g.Id == userId).FirstOrDefault();
+                throw new System.NotImplementedException();
+            }
+
+            return _context.Users.Where(g => g.SubscriberId == subscriberId).FirstOrDefault();
+        }
+
+        public void AddUser(User user)
+        {
+            _context.Users.Add(user);
+        }
+
+        public void DeleteUser(User user)
+        {
+            _context.Users.Remove(user);
+        }
+        #endregion User methods
+
         public bool Save()
         {
             return (_context.SaveChanges() >= 0);

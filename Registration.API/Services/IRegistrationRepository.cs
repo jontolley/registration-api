@@ -23,6 +23,14 @@ namespace Registration.API.Services
         void AddSubgroup(int groupId, Subgroup subgroup);
         void DeleteSubgroup(Subgroup subgroup);
 
+        bool UserExists(int userId);
+        bool UserExists(string subscriberId);
+        IEnumerable<User> GetUsers();
+        User GetUser(int userId, bool includeRoles);
+        User GetUser(string subscriberId, bool includeRoles);
+        void AddUser(User user);
+        void DeleteUser(User user);
+
         bool Save();
     }
 }
