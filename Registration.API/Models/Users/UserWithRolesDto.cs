@@ -4,8 +4,6 @@ namespace Registration.API.Models
 {
     public class UserWithRolesDto
     {
-        public int Id { get; set; }
-
         public string SubscriberId { get; set; }
 
         public string Name { get; set; }

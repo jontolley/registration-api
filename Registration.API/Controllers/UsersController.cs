@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Registration.API.Models;
 using Registration.API.Services;
 using System.Collections.Generic;
+using Registration.API.Entities;
 
 namespace Registration.API.Controllers
 {
@@ -30,9 +31,9 @@ namespace Registration.API.Controllers
 
         [Authorize]
         [HttpGet("{id}", Name = "GetUser")]
-        public IActionResult GetUser(int id, bool includeRoles = false)
+        public IActionResult GetUser(string subscriberId, bool includeRoles = false)
         {
-            var user = _registrationRepository.GetUser(id, includeRoles);
+            var user = _registrationRepository.GetUser(subscriberId, includeRoles);
 
             if (user == null)
             {
@@ -63,9 +64,19 @@ namespace Registration.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userEntity = Mapper.Map<Entities.User>(userDto);
+            var userExists = _registrationRepository.UserExists(userDto.SubscriberId);
+            User userEntity;
 
-            _registrationRepository.AddUser(userEntity);
+            if (userExists)
+            {
+                userEntity = _registrationRepository.GetUser(userDto.SubscriberId, false);
+                Mapper.Map(userDto, userEntity);
+            }
+            else
+            {
+                userEntity = Mapper.Map<User>(userDto);
+                _registrationRepository.AddUser(userEntity);
+            }
 
             if (!_registrationRepository.Save())
             {
@@ -75,7 +86,7 @@ namespace Registration.API.Controllers
             var createdUserToReturn = Mapper.Map<UserDto>(userEntity);
 
             return CreatedAtRoute("GetUser", new
-            { id = createdUserToReturn.Id }, createdUserToReturn);
+            { id = createdUserToReturn.SubscriberId }, createdUserToReturn);
         }
 
         [Authorize]

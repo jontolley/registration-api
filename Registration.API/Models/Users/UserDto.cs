@@ -2,8 +2,6 @@
 {
     public class UserDto
     {
-        public int Id { get; set; }
-
         public string SubscriberId { get; set; }
 
         public string Name { get; set; }
