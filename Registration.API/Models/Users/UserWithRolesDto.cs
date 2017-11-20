@@ -21,6 +21,6 @@ namespace Registration.API.Models
                 return Roles.Count;
             }
         }
-        public ICollection<RoleDto> Roles { get; set; }
+        public ICollection<string> Roles { get; set; }
     }
 }

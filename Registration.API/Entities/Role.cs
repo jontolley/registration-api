@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Registration.API.Entities
@@ -15,5 +16,8 @@ namespace Registration.API.Entities
 
         [MaxLength(100)]
         public string Description { get; set; }
+
+        public ICollection<UserRole> UserRoles { get; set; }
+               = new List<UserRole>();
     }
 }

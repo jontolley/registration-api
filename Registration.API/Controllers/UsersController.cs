@@ -30,7 +30,7 @@ namespace Registration.API.Controllers
         }
 
         [Authorize]
-        [HttpGet("{id}", Name = "GetUser")]
+        [HttpGet("{subscriberId}", Name = "GetUser")]
         public IActionResult GetUser(string subscriberId, bool includeRoles = false)
         {
             var user = _registrationRepository.GetUser(subscriberId, includeRoles);
@@ -69,7 +69,7 @@ namespace Registration.API.Controllers
 
             if (userExists)
             {
-                userEntity = _registrationRepository.GetUser(userDto.SubscriberId, false);
+                userEntity = _registrationRepository.GetUser(userDto.SubscriberId, true);
                 Mapper.Map(userDto, userEntity);
             }
             else
@@ -83,10 +83,10 @@ namespace Registration.API.Controllers
                 return StatusCode(500, "A problem happened while handling your request.");
             }
 
-            var createdUserToReturn = Mapper.Map<UserDto>(userEntity);
+            var createdUserToReturn = Mapper.Map<UserWithRolesDto>(userEntity);
 
             return CreatedAtRoute("GetUser", new
-            { id = createdUserToReturn.SubscriberId }, createdUserToReturn);
+            { subscriberId = createdUserToReturn.SubscriberId }, createdUserToReturn);
         }
 
         [Authorize]

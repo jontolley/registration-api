@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Registration.API.CustomDtoMapper;
 using Registration.API.Entities;
 using Registration.API.Services;
 
@@ -96,12 +97,11 @@ namespace Registration.API
                 cfg.CreateMap<Models.SubgroupForUpdateDto, Entities.Subgroup>();
 
                 cfg.CreateMap<Entities.User, Models.UserDto>();
-                cfg.CreateMap<Entities.User, Models.UserWithRolesDto>();
+                cfg.CreateMap<Entities.User, Models.UserWithRolesDto>().ConvertUsing<UserToUserWithRolesDtoConverter>();
+
                 cfg.CreateMap<Entities.User, Models.UserForUpdateDto>();
                 cfg.CreateMap<Models.UserForCreationDto, Entities.User>();
                 cfg.CreateMap<Models.UserForUpdateDto, Entities.User>();
-
-                cfg.CreateMap<Entities.Role, Models.RoleDto>();
             });
             
             app.UseMvc();

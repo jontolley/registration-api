@@ -133,9 +133,8 @@ namespace Registration.API.Services
         {
             if (includeRoles)
             {
-                //return _context.Users.Include(g => g.)
-                //    .Where(g => g.Id == userId).FirstOrDefault();
-                throw new System.NotImplementedException();
+                return _context.Users.Include(g => g.UserRoles).ThenInclude(ur => ur.Role).Where(g => g.SubscriberId == subscriberId).FirstOrDefault();
+                //throw new System.NotImplementedException();
             }
 
             return _context.Users.Where(g => g.SubscriberId == subscriberId).FirstOrDefault();
