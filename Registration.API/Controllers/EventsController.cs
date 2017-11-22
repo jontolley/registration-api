@@ -17,10 +17,8 @@ namespace Registration.API.Controllers
         {
             _registrationRepository = registrationRepository;
         }
-
-        //[Authorize(Roles = "admin")]
-        [Authorize(Policy = "Over21")]
-        //[Authorize]
+        
+        [Authorize]
         [HttpGet]
         public IActionResult GetEvents()
         {
