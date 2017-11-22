@@ -35,7 +35,7 @@ namespace Registration.API
             }).AddJwtBearer(options =>
             {
                 options.Authority = "https://tolleyfam.auth0.com/";
-                options.Audience = "http://localhost:19671";
+                options.Audience = "https://sunrise2018.org/api";
                 options.SaveToken = true;
             });
 
