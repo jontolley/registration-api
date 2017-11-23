@@ -4,6 +4,8 @@ using Registration.API.Models.Contacts;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.IO;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Registration.API.Services.Email
@@ -58,7 +60,7 @@ namespace Registration.API.Services.Email
             return response;
         }
 
-        public EmailMessage GenerateEmailMessage(ContactDto contactDto)
+        public async Task<EmailMessage> GenerateEmailMessageAsync(ContactDto contactDto)
         {
             var email = new EmailMessage
             {
@@ -66,18 +68,22 @@ namespace Registration.API.Services.Email
                 From = "contact@sunrise2018.org",
                 Subject = "LDS Encampment Message",
                 ContentType = EmailContentType.Html,
-                Message = BuildEmailMessage(contactDto)
+                Message = await BuildEmailMessageAsync(contactDto)
             };
 
             return email;
         }
 
-        private string BuildEmailMessage(ContactDto contactInfo)
+        private async Task<string> BuildEmailMessageAsync(ContactDto contactInfo)
         {
-            string contentRootPath = _hostingEnvironment.ContentRootPath;
+            string template;
 
-            var templatePath = Path.Combine(contentRootPath, "services/email/templates/contactUs.html");
-            var template = File.ReadAllText(templatePath);
+            var assembly = Assembly.GetEntryAssembly();
+            var resourceStream = assembly.GetManifestResourceStream("Registration.API.Services.Email.Templates.contactUs.html");
+            using (var reader = new StreamReader(resourceStream, Encoding.UTF8))
+            {
+                template = await reader.ReadToEndAsync();
+            }
 
             var message = template
                 .Replace("__FIRST_NAME", contactInfo.FirstName)

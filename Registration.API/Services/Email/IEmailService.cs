@@ -7,6 +7,6 @@ namespace Registration.API.Services.Email
     public interface IEmailService
     {
         Task<IEmailResponse> SendMessage(EmailMessage email);
-        EmailMessage GenerateEmailMessage(ContactDto contactDto);
+        Task<EmailMessage> GenerateEmailMessageAsync(ContactDto contactDto);
     }
 }

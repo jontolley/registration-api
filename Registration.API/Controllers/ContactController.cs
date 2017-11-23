@@ -32,7 +32,7 @@ namespace Registration.API.Controllers
 
             try
             {
-                EmailMessage email = _emailService.GenerateEmailMessage(contactDto);
+                EmailMessage email = await _emailService.GenerateEmailMessageAsync(contactDto);
 
                 var response = await _emailService.SendMessage(email);
 
