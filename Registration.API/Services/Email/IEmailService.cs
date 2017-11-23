@@ -1,10 +1,12 @@
 ﻿using Registration.API.Models;
 using System.Threading.Tasks;
+using Registration.API.Models.Contacts;
 
 namespace Registration.API.Services.Email
 {
     public interface IEmailService
     {
-        void SendMessage(EmailMessage email);
+        Task<IEmailResponse> SendMessage(EmailMessage email);
+        EmailMessage GenerateEmailMessage(ContactDto contactDto);
     }
 }

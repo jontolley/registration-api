@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Registration.API.CustomDtoMapper;
 using Registration.API.Entities;
 using Registration.API.Services;
+using Registration.API.Services.Email;
 
 namespace Registration.API
 {
@@ -60,6 +61,7 @@ namespace Registration.API
             services.AddDbContext<RegistrationContext>(o => o.UseSqlServer(connectionString));
 
             services.AddScoped<IRegistrationRepository, RegistrationRepository>();
+            services.AddScoped<IEmailService, SendGridService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
