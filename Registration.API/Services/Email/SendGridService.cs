@@ -3,6 +3,7 @@ using Registration.API.Models;
 using Registration.API.Models.Contacts;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -15,7 +16,7 @@ namespace Registration.API.Services.Email
         // https://docs.microsoft.com/en-us/azure/sendgrid-dotnet-how-to-send-email
 
         private readonly string _apiKey;
-        private readonly string _contactEmail;
+        private readonly IEnumerable<string> _contactEmails;
         private readonly IHostingEnvironment _hostingEnvironment;
 
         public SendGridService(IHostingEnvironment hostingEnvironment)
@@ -23,7 +24,8 @@ namespace Registration.API.Services.Email
             _hostingEnvironment = hostingEnvironment;
 
             _apiKey = Startup.Configuration["appSettings:sendGridApiKey"];
-            _contactEmail = Startup.Configuration["appSettings:contactEmail"];
+            var contactEmails = Startup.Configuration["appSettings:contactEmail"];
+            _contactEmails = contactEmails.Split(',');
         }
 
         public async Task<IEmailResponse> SendMessage(EmailMessage email)
@@ -64,7 +66,7 @@ namespace Registration.API.Services.Email
         {
             var email = new EmailMessage
             {
-                To = new[] { _contactEmail },
+                To = _contactEmails,
                 From = "contact@sunrise2018.org",
                 Subject = "LDS Encampment Message",
                 ContentType = EmailContentType.Html,
