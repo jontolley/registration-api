@@ -18,7 +18,7 @@ namespace Registration.API.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> CreateEvent([FromBody] ContactDto contactDto)
+        public async Task<IActionResult> CreateContact([FromBody] ContactDto contactDto)
         {
             if (contactDto == null)
             {

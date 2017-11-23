@@ -88,8 +88,7 @@ namespace Registration.API.Services.Email
             }
 
             var message = template
-                .Replace("__FIRST_NAME", contactInfo.FirstName)
-                .Replace("__LAST_NAME", contactInfo.LastName)
+                .Replace("__NAME", contactInfo.Name)
                 .Replace("__EMAIL", contactInfo.Email)
                 .Replace("__MESSAGE", contactInfo.Message)
                 .Replace("__PHONE_NUMBER", contactInfo.PhoneNumber)
