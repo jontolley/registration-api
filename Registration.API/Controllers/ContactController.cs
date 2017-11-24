@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Registration.API.Controllers
 {
-    [Route("api/contacts")]
+    [Route("api/contact")]
     public class ContactController : Controller
     {
         private IEmailService _emailService;
