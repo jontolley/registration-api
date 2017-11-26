@@ -35,8 +35,10 @@ namespace Registration.API.Controllers
                 EmailMessage email = await _emailService.GenerateEmailMessageAsync(contactDto);
 
                 var response = await _emailService.SendMessage(email);
-                
-                return StatusCode((int)response.StatusCode);
+
+                var code = (int)response.StatusCode;
+
+                return StatusCode(code, new { });
             }
             catch(Exception)
             {

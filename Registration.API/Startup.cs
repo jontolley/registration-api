@@ -50,7 +50,7 @@ namespace Registration.API
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder.WithOrigins(new[]{ "https://sunrise2018.org", "http://encampment.dev:4200", "https://encampment.azurewebsites.net" })
+                    builder => builder.WithOrigins(new[]{ "https://sunrise2018.org", "http://sunrise2018.org:4200", "http://encampment.dev:4200", "https://encampment.azurewebsites.net" })
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()
