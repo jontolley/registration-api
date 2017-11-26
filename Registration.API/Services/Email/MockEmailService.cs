@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Registration.API.Models;
+﻿using Registration.API.Models;
 using Registration.API.Models.Contacts;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -11,54 +8,14 @@ using System.Threading.Tasks;
 
 namespace Registration.API.Services.Email
 {
-    public class SendGridService : IEmailService
+    public class MockEmailService : IEmailService
     {
-        // https://docs.microsoft.com/en-us/azure/sendgrid-dotnet-how-to-send-email
-
-        private readonly string _apiKey;
         private readonly IEnumerable<string> _contactEmails;
-        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public SendGridService(IHostingEnvironment hostingEnvironment)
+        public MockEmailService()
         {
-            _hostingEnvironment = hostingEnvironment;
-
-            _apiKey = Startup.Configuration["appSettings:sendGridApiKey"];
             var contactEmails = Startup.Configuration["appSettings:contactEmail"];
             _contactEmails = contactEmails.Split(',');
-        }
-
-        public async Task<IEmailResponse> SendMessage(EmailMessage email)
-        {
-            var client = new SendGridClient(_apiKey);
-            var message = new SendGridMessage()
-            {
-                From = new EmailAddress(email.From),
-                Subject = email.Subject
-            };
-
-            if(email.ContentType == EmailContentType.Html)
-            {
-                message.HtmlContent = email.Message;
-            } else
-            {
-                message.PlainTextContent = email.Message;
-            }
-
-            foreach (var recipient in email.To)
-            {
-                message.AddTo(recipient);
-            }            
-
-            var sendGridResponse = await client.SendEmailAsync(message);
-
-            var response = new SimpleEmailResponse()
-            {
-                StatusCode = sendGridResponse.StatusCode,
-                Body = sendGridResponse.Body
-            };
-
-            return response;
         }
 
         public async Task<EmailMessage> GenerateEmailMessageAsync(ContactDto contactDto)
@@ -73,6 +30,19 @@ namespace Registration.API.Services.Email
             };
 
             return email;
+        }
+
+        public async Task<IEmailResponse> SendMessage(EmailMessage email)
+        {
+            await Task.Delay(1000);
+
+            var response = new SimpleEmailResponse()
+            {
+                StatusCode = System.Net.HttpStatusCode.Accepted,
+                Body = null
+            };
+
+            return response;
         }
 
         private async Task<string> BuildEmailMessageAsync(ContactDto contactInfo)

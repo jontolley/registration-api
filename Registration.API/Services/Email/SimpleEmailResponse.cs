@@ -8,6 +8,5 @@ namespace Registration.API.Services.Email
     {
         public HttpStatusCode StatusCode { get; set; }
         public HttpContent Body { get; set; }
-        public HttpResponseHeaders Headers { get; set; }
     }
 }
