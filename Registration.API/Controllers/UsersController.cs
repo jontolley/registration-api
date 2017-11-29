@@ -19,7 +19,7 @@ namespace Registration.API.Controllers
             _registrationRepository = registrationRepository;
         }
 
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [HttpGet]
         public IActionResult GetUsers()
         {
@@ -29,7 +29,7 @@ namespace Registration.API.Controllers
             return Ok(userDtos);
         }
 
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [HttpGet("{subscriberId}", Name = "GetUser")]
         public IActionResult GetUser(string subscriberId, bool includeRoles = false)
         {
@@ -153,7 +153,7 @@ namespace Registration.API.Controllers
             return NoContent();
         }
 
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [HttpDelete("{id}")]
         public IActionResult DeleteUser(int id)
         {

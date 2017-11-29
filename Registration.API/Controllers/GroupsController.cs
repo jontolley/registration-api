@@ -18,17 +18,18 @@ namespace Registration.API.Controllers
             _registrationRepository = registrationRepository;
         }
 
-        [Authorize]
+        [Authorize(Policy = "User")]
         [HttpGet]
         public IActionResult GetGroups()
         {
+            var x = User.Identity;
             var groupEntities = _registrationRepository.GetGroups();
             var groupDtos = Mapper.Map<IEnumerable<GroupDto>>(groupEntities);
 
             return Ok(groupDtos);
         }
 
-        [Authorize]
+        [Authorize(Policy = "User")]
         [HttpGet("{id}", Name = "GetGroup")]
         public IActionResult GetGroup(int id, bool includeSubgroups = false)
         {
@@ -49,7 +50,7 @@ namespace Registration.API.Controllers
             return Ok(groupResult);
         }
 
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [HttpPost]
         public IActionResult CreateGroup([FromBody] GroupForCreationDto groupDto)
         {
@@ -78,7 +79,7 @@ namespace Registration.API.Controllers
             { id = createdGroupToReturn.Id }, createdGroupToReturn);
         }
 
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [HttpPut("{id}")]
         public IActionResult UpdateGroup(int id,
             [FromBody] GroupForUpdateDto groupDto)
@@ -109,7 +110,7 @@ namespace Registration.API.Controllers
             return NoContent();
         }
 
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [HttpPatch("{id}")]
         public IActionResult PartiallyUpdateGroup(int id,
             [FromBody] JsonPatchDocument<GroupForUpdateDto> patchDoc)
@@ -144,7 +145,7 @@ namespace Registration.API.Controllers
             return NoContent();
         }
 
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [HttpDelete("{id}")]
         public IActionResult DeleteGroup(int id)
         {

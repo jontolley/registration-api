@@ -42,15 +42,22 @@ namespace Registration.API
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("Over21", policy => policy.Requirements.Add(new MinimumAgeRequirement(21)));
+                options.AddPolicy("User", policy => policy.Requirements.Add(new UserRoleRequirement()));
+                options.AddPolicy("Admin", policy => policy.Requirements.Add(new AdminRoleRequirement()));
             });
 
-            services.AddSingleton<IAuthorizationHandler, MinimumAgeHandler>();
+            services.AddSingleton<IAuthorizationHandler, UserRoleHandler>();
+            services.AddSingleton<IAuthorizationHandler, AdminRoleHandler>();
 
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder.WithOrigins(new[]{ "https://sunrise2018.org", "http://sunrise2018.org:4200", "http://encampment.dev:4200", "https://encampment.azurewebsites.net" })
+                    builder => builder.WithOrigins(new[]{
+                        "http://authdemo.dev:4200",
+                        "https://sunrise2018.org",
+                        "http://sunrise2018.org:4200",
+                        "http://encampment.dev:4200",
+                        "https://encampment.azurewebsites.net" })
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()

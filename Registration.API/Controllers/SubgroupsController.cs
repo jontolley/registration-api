@@ -19,7 +19,7 @@ namespace Registration.API.Controllers
             _registrationRepository = registrationRepository;
         }
 
-        [Authorize]
+        [Authorize(Policy = "User")]
         [HttpGet("{groupId}/subgroups")]
         public IActionResult GetSubgroups(int groupId)
         {
@@ -41,7 +41,7 @@ namespace Registration.API.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Policy = "User")]
         [HttpGet("{groupId}/subgroups/{id}", Name = "GetSubgroup")]
         public IActionResult GetSubgroup(int groupId, int id)
         {
@@ -61,7 +61,7 @@ namespace Registration.API.Controllers
             return Ok(subgroupResult);
         }
 
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [HttpPost("{groupId}/subgroups")]
         public IActionResult CreateSubgroup(int groupId, [FromBody] SubgroupForCreationDto subgroupDto)
         {
@@ -95,7 +95,7 @@ namespace Registration.API.Controllers
             { id = createdSubgroupToReturn.Id }, createdSubgroupToReturn);
         }
 
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [HttpPut("{groupId}/subgroups/{id}")]
         public IActionResult UpdateSubgroup(int groupId, int id,
             [FromBody] SubgroupForUpdateDto subgroupDto)
@@ -131,7 +131,7 @@ namespace Registration.API.Controllers
             return NoContent();
         }
 
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [HttpPatch("{groupId}/subgroups/{id}")]
         public IActionResult PartiallyUpdateSubgroup(int groupId, int id,
             [FromBody] JsonPatchDocument<SubgroupForUpdateDto> patchDoc)
@@ -171,7 +171,7 @@ namespace Registration.API.Controllers
             return NoContent();
         }
 
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [HttpDelete("{groupId}/subgroups/{id}")]
         public IActionResult DeleteSubgroup(int groupId, int id)
         {

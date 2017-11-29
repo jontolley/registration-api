@@ -17,8 +17,8 @@ namespace Registration.API.Controllers
         {
             _registrationRepository = registrationRepository;
         }
-        
-        [Authorize]
+
+        [Authorize(Policy = "User")]
         [HttpGet]
         public IActionResult GetEvents()
         {
@@ -32,7 +32,7 @@ namespace Registration.API.Controllers
             return Ok(eventDtos);
         }
 
-        [Authorize]
+        [Authorize(Policy = "User")]
         [HttpGet("{id}", Name = "GetEvent")]
         public IActionResult GetEvent(int id)
         {
@@ -47,7 +47,7 @@ namespace Registration.API.Controllers
             return Ok(eventResult);
         }
 
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [HttpPost]
         public IActionResult CreateEvent([FromBody] EventForCreationDto eventDto)
         {
@@ -76,7 +76,7 @@ namespace Registration.API.Controllers
             { id = createdEventToReturn.Id }, createdEventToReturn);
         }
 
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [HttpPut("{id}")]
         public IActionResult UpdateEvent(int id,
             [FromBody] EventForUpdateDto eventDto)
@@ -107,7 +107,7 @@ namespace Registration.API.Controllers
             return NoContent();
         }
 
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [HttpPatch("{id}")]
         public IActionResult PartiallyUpdateEvent(int id,
             [FromBody] JsonPatchDocument<EventForUpdateDto> patchDoc)
@@ -142,7 +142,7 @@ namespace Registration.API.Controllers
             return NoContent();
         }
 
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [HttpDelete("{id}")]
         public IActionResult DeleteEvent(int id)
         {
