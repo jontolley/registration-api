@@ -27,10 +27,14 @@ namespace Registration.API
             {
                 var user = db.Users.Include(g => g.UserRoles).ThenInclude(ur => ur.Role).Where(g => g.SubscriberId == userIdentifier).FirstOrDefault();
 
-                foreach (var role in user.UserRoles)
+                if (user != null)
                 {
-                    if (role.Role.Name == requirement.Role) context.Succeed(requirement);
+                    foreach (var role in user.UserRoles)
+                    {
+                        if (role.Role.Name == requirement.Role) context.Succeed(requirement);
+                    }
                 }
+                    
 
                 return Task.CompletedTask;
             }
