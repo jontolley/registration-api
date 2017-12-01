@@ -9,6 +9,12 @@ namespace Registration.API.Entities
         {
             Database.Migrate();
         }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<User>()
+                 .HasIndex(u => u.SubscriberId)
+                 .IsUnique();
+        }
 
         public DbSet<Event> Events { get; set; }
         public DbSet<Group> Groups { get; set; }

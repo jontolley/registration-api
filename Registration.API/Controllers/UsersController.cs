@@ -6,6 +6,9 @@ using Registration.API.Models;
 using Registration.API.Services;
 using System.Collections.Generic;
 using Registration.API.Entities;
+using System;
+using System.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace Registration.API.Controllers
 {
@@ -64,29 +67,37 @@ namespace Registration.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userExists = _registrationRepository.UserExists(userDto.SubscriberId);
-            User userEntity;
+            try
+            {
+                var userEntity = Mapper.Map<User>(userDto);
 
-            if (userExists)
-            {
-                userEntity = _registrationRepository.GetUser(userDto.SubscriberId, true);
-                Mapper.Map(userDto, userEntity);
-            }
-            else
-            {
-                userEntity = Mapper.Map<User>(userDto);
                 _registrationRepository.AddUser(userEntity);
-            }
 
-            if (!_registrationRepository.Save())
+                if (!_registrationRepository.Save())
+                {
+                    return StatusCode(500, "A problem happened while handling your request.");
+                }
+
+                var createdUserToReturn = Mapper.Map<UserWithRolesDto>(userEntity);
+
+                return CreatedAtRoute("GetUser", new
+                { subscriberId = createdUserToReturn.SubscriberId }, createdUserToReturn);
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException is SqlException innerException && innerException.Number == 2601)
+                {
+                    return BadRequest("Subscriber ID already exists - Duplicate Subscriber ID");
+                }
+                else
+                {
+                    return StatusCode(500, "A problem happened while handling your request.");
+                }
+            }
+            catch(Exception)
             {
                 return StatusCode(500, "A problem happened while handling your request.");
             }
-
-            var createdUserToReturn = Mapper.Map<UserWithRolesDto>(userEntity);
-
-            return CreatedAtRoute("GetUser", new
-            { subscriberId = createdUserToReturn.SubscriberId }, createdUserToReturn);
         }
 
         [Authorize]
@@ -109,14 +120,32 @@ namespace Registration.API.Controllers
                 return NotFound();
             }
 
-            Mapper.Map(userDto, userEntity);
+            try
+            {
+                Mapper.Map(userDto, userEntity);
 
-            if (!_registrationRepository.Save())
+                if (!_registrationRepository.Save())
+                {
+                    return StatusCode(500, "A problem happened while handling your request.");
+                }
+
+                return NoContent();
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException is SqlException innerException && innerException.Number == 2601)
+                {
+                    return BadRequest("Subscriber ID already exists - Duplicate Subscriber ID");
+                }
+                else
+                {
+                    return StatusCode(500, "A problem happened while handling your request.");
+                }
+            }
+            catch (Exception)
             {
                 return StatusCode(500, "A problem happened while handling your request.");
             }
-
-            return NoContent();
         }
 
         [Authorize]
@@ -143,14 +172,32 @@ namespace Registration.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            Mapper.Map(userToPatch, userEntity);
+            try
+            {
+                Mapper.Map(userToPatch, userEntity);
 
-            if (!_registrationRepository.Save())
+                if (!_registrationRepository.Save())
+                {
+                    return StatusCode(500, "A problem happened while handling your request.");
+                }
+
+                return NoContent();
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException is SqlException innerException && innerException.Number == 2601)
+                {
+                    return BadRequest("Subscriber ID already exists - Duplicate Subscriber ID");
+                }
+                else
+                {
+                    return StatusCode(500, "A problem happened while handling your request.");
+                }
+            }
+            catch (Exception)
             {
                 return StatusCode(500, "A problem happened while handling your request.");
-            }
-
-            return NoContent();
+            }            
         }
 
         [Authorize(Policy = "Admin")]
