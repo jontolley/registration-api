@@ -28,5 +28,8 @@ namespace Registration.API.Entities
 
         public ICollection<UserRole> UserRoles { get; set; }
                = new List<UserRole>();
+
+        public ICollection<UserSubgroup> UserSubgroups { get; set; }
+               = new List<UserSubgroup>();
     }
 }
