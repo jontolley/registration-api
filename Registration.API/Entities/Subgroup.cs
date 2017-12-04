@@ -11,6 +11,9 @@ namespace Registration.API.Entities
         public int Id { get; set; }
 
         [Required]
+        public int PinNumber { get; set; }
+
+        [Required]
         [MaxLength(50)]
         public string Name { get; set; }
 
