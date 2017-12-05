@@ -107,6 +107,7 @@ namespace Registration.API
 
                 cfg.CreateMap<Entities.User, Models.UserDto>();
                 cfg.CreateMap<Entities.User, Models.UserWithRolesDto>().ConvertUsing<UserToUserWithRolesDtoConverter>();
+                cfg.CreateMap<Entities.User, Models.UserWithSubgroupsDto>().ConvertUsing<UserToUserWithSubgroupsDtoConverter>();
 
                 cfg.CreateMap<Entities.User, Models.UserForUpdateDto>();
                 cfg.CreateMap<Models.UserForCreationDto, Entities.User>();

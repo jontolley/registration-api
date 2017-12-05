@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Registration.API.Models;
-using Registration.API.Models.Contacts;
 using Registration.API.Services.Email;
 using System;
 using System.Threading.Tasks;

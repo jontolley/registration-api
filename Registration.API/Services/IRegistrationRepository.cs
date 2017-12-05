@@ -18,6 +18,7 @@ namespace Registration.API.Services
         void DeleteGroup(Group group);
 
         bool SubgroupExists(int groupId, int subgroupId);
+        bool CheckSubgroupPin(int subgroupId, int pin);
         IEnumerable<Subgroup> GetSubgroups(int groupId);
         Subgroup GetSubgroup(int groupId, int subgroupId);
         void AddSubgroup(int groupId, Subgroup subgroup);
@@ -26,10 +27,17 @@ namespace Registration.API.Services
         bool UserExists(int userId);
         bool UserExists(string subscriberId);
         IEnumerable<User> GetUsers();
-        User GetUser(int userId, bool includeRoles);
-        User GetUser(string subscriberId, bool includeRoles);
+        User GetUser(int userId, bool includeRoles = false, bool includeSubgroups = false);
+        User GetUser(string subscriberId, bool includeRoles = false, bool includeSubgroups = false);
         void AddUser(User user);
         void DeleteUser(User user);
+
+        Role GetRole(string role);
+        void AddRole(User user, Role role);
+        void RemoveRole(User user, Role role);
+        
+        void AddAssignment(UserSubgroup userSubgroup);
+        void RemoveAllAssignments(User user);
 
         bool Save();
     }

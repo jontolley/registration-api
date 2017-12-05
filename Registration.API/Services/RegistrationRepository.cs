@@ -79,6 +79,11 @@ namespace Registration.API.Services
             return _context.Subgroups.Any(s => s.Id == subgroupId && s.GroupId == groupId);
         }
 
+        public bool CheckSubgroupPin(int subgroupId, int pin)
+        {
+            return _context.Subgroups.Any(s => s.Id == subgroupId && s.PinNumber == pin);
+        }
+
         public IEnumerable<Subgroup> GetSubgroups(int groupId)
         {
             return _context.Subgroups.Where(s => s.GroupId == groupId).OrderBy(s => s.Name).ToList();
@@ -117,24 +122,37 @@ namespace Registration.API.Services
             return _context.Users.OrderBy(e => e.Name).ToList();
         }
 
-        public User GetUser(int userId, bool includeRoles)
+        public User GetUser(int userId, bool includeRoles = false, bool includeSubgroups = false)
         {
-            if (includeRoles)
+            if (includeRoles && includeSubgroups)
             {
-                //return _context.Users.Include(g => g.)
-                //    .Where(g => g.Id == userId).FirstOrDefault();
                 throw new System.NotImplementedException();
+            }
+            else if (includeRoles)
+            {
+                return _context.Users.Include(g => g.UserRoles).ThenInclude(ur => ur.Role).Where(g => g.Id == userId).FirstOrDefault();
+            }
+            else if (includeSubgroups)
+            {
+                return _context.Users.Include(g => g.UserSubgroups).ThenInclude(us => us.Subgroup).Where(g => g.Id == userId).FirstOrDefault();
             }
 
             return _context.Users.Where(g => g.Id == userId).FirstOrDefault();
         }
 
-        public User GetUser(string subscriberId, bool includeRoles)
+        public User GetUser(string subscriberId, bool includeRoles = false, bool includeSubgroups = false)
         {
-            if (includeRoles)
+            if (includeRoles && includeSubgroups)
+            {
+                throw new System.NotImplementedException();
+            }
+            else if (includeRoles)
             {
                 return _context.Users.Include(g => g.UserRoles).ThenInclude(ur => ur.Role).Where(g => g.SubscriberId == subscriberId).FirstOrDefault();
-                //throw new System.NotImplementedException();
+            }
+            else if (includeSubgroups)
+            {
+                return _context.Users.Include(g => g.UserSubgroups).ThenInclude(us => us.Subgroup).Where(g => g.SubscriberId == subscriberId).FirstOrDefault();
             }
 
             return _context.Users.Where(g => g.SubscriberId == subscriberId).FirstOrDefault();
@@ -150,6 +168,46 @@ namespace Registration.API.Services
             _context.Users.Remove(user);
         }
         #endregion User methods
+
+        #region Role methods
+        public Role GetRole(string role)
+        {
+            return _context.Roles.FirstOrDefault(r => r.Name == role);
+        }
+
+        public void AddRole(User user, Role role)
+        {
+            var roleAlreadyAssigned = _context.UserRoles.Any(ur => ur.UserId == user.Id && ur.RoleId == role.Id);
+            if (roleAlreadyAssigned) return;
+
+            user.UserRoles.Add(new UserRole { UserId = user.Id, RoleId = role.Id });
+        }
+
+        public void RemoveRole(User user, Role role)
+        {
+            var userRole = _context.UserRoles.FirstOrDefault(ur => ur.UserId == user.Id && ur.RoleId == role.Id);
+
+            if (userRole == null) return;
+            
+            _context.UserRoles.Remove(userRole);
+        }
+        #endregion Role methods
+
+        #region Assignment methods
+        public void AddAssignment(UserSubgroup userSubgroup)
+        {
+            _context.UserSubgroups.Add(userSubgroup);
+        }
+
+        public void RemoveAllAssignments(User user)
+        {
+            var allAssignments = _context.UserSubgroups.Where(us => us.UserId == user.Id);
+            foreach (var assignment in allAssignments)
+            {
+                _context.UserSubgroups.Remove(assignment);
+            }            
+        }
+        #endregion Assignment methods
 
         public bool Save()
         {

@@ -1,5 +1,4 @@
 ﻿using Registration.API.Models;
-using Registration.API.Models.Contacts;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;

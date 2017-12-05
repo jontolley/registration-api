@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Registration.API.Models;
-using Registration.API.Models.Contacts;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Collections.Generic;

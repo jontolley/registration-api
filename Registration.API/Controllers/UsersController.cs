@@ -114,7 +114,7 @@ namespace Registration.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userEntity = _registrationRepository.GetUser(id, includeRoles: false);
+            var userEntity = _registrationRepository.GetUser(id);
             if (userEntity == null)
             {
                 return NotFound();
@@ -157,7 +157,7 @@ namespace Registration.API.Controllers
                 return BadRequest();
             }
 
-            var userEntity = _registrationRepository.GetUser(id, includeRoles: false);
+            var userEntity = _registrationRepository.GetUser(id);
             if (userEntity == null)
             {
                 return NotFound();
@@ -204,7 +204,7 @@ namespace Registration.API.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteUser(int id)
         {
-            var userEntity = _registrationRepository.GetUser(id, includeRoles: false);
+            var userEntity = _registrationRepository.GetUser(id);
             if (userEntity == null)
             {
                 return NotFound();

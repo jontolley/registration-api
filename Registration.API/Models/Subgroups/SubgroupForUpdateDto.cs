@@ -5,6 +5,9 @@ namespace Registration.API.Models
     public class SubgroupForUpdateDto
     {
         [Required(ErrorMessage = "You must provide a name value.")]
+        public int PinNumber { get; set; }
+
+        [Required(ErrorMessage = "You must provide a name value.")]
         [MaxLength(50)]
         public string Name { get; set; }
 

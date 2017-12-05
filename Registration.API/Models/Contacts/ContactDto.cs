@@ -1,4 +1,4 @@
-﻿namespace Registration.API.Models.Contacts
+﻿namespace Registration.API.Models
 {
     public class ContactDto
     {
