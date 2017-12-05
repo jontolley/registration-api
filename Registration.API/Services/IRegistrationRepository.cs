@@ -1,5 +1,6 @@
 ﻿using Registration.API.Entities;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Registration.API.Services
 {
@@ -23,6 +24,10 @@ namespace Registration.API.Services
         Subgroup GetSubgroup(int groupId, int subgroupId);
         void AddSubgroup(int groupId, Subgroup subgroup);
         void DeleteSubgroup(Subgroup subgroup);
+        
+        IEnumerable<Attendee> GetAttendees(int subgroupId);
+        Attendee GetAttendee(int subgroupId, int attendeeId);
+        void AddAttendee(Attendee attendee);
 
         bool UserExists(int userId);
         bool UserExists(string subscriberId);
@@ -38,6 +43,10 @@ namespace Registration.API.Services
         
         void AddAssignment(UserSubgroup userSubgroup);
         void RemoveAllAssignments(User user);
+
+        IQueryable<ShirtSize> GetShirtSizes();
+        IQueryable<MeritBadge> GetMeritBadges();
+        IQueryable<Accommodation> GetAccommodations();
 
         bool Save();
     }

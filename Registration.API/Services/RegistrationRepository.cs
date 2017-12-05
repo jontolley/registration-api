@@ -209,6 +209,46 @@ namespace Registration.API.Services
         }
         #endregion Assignment methods
 
+        #region Attendee methods
+        public IEnumerable<Attendee> GetAttendees(int subgroupId)
+        {
+            return _context.Attendees.Include(a => a.ShirtSize)
+                .Include(a => a.AttendeeMeritBadges).ThenInclude(ab => ab.MeritBadge)
+                .Include(a => a.AttendeeAccommodations).ThenInclude(aa => aa.Accommodation)
+                .Where(a => a.SubgroupId == subgroupId);
+        }
+
+        public Attendee GetAttendee(int subgroupId, int attendeeId)
+        {
+            return _context.Attendees.Include(a => a.ShirtSize)
+                .Include(a => a.AttendeeMeritBadges).ThenInclude(ab => ab.MeritBadge)
+                .Include(a => a.AttendeeAccommodations).ThenInclude(aa => aa.Accommodation)
+                .FirstOrDefault(a => a.SubgroupId == subgroupId && a.Id == attendeeId);
+        }
+
+        public void AddAttendee(Attendee attendee)
+        {
+            _context.Attendees.Add(attendee);
+        }
+        #endregion Attendee methods
+
+        #region Support methods
+        public IQueryable<ShirtSize> GetShirtSizes()
+        {
+            return _context.ShirtSizes;
+        }
+
+        public IQueryable<MeritBadge> GetMeritBadges()
+        {
+            return _context.MeritBadges;
+        }
+
+        public IQueryable<Accommodation> GetAccommodations()
+        {
+            return _context.Accommodations;
+        }
+        #endregion Support methods
+
         public bool Save()
         {
             return (_context.SaveChanges() >= 0);

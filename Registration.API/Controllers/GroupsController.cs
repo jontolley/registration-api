@@ -22,7 +22,6 @@ namespace Registration.API.Controllers
         [HttpGet]
         public IActionResult GetGroups()
         {
-            var x = User.Identity;
             var groupEntities = _registrationRepository.GetGroups();
             var groupDtos = Mapper.Map<IEnumerable<GroupDto>>(groupEntities);
 

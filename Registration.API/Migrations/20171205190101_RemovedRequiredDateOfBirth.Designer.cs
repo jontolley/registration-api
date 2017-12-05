@@ -11,9 +11,10 @@ using System;
 namespace Registration.API.Migrations
 {
     [DbContext(typeof(RegistrationContext))]
-    partial class RegistrationContextModelSnapshot : ModelSnapshot
+    [Migration("20171205190101_RemovedRequiredDateOfBirth")]
+    partial class RemovedRequiredDateOfBirth
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,15 +57,11 @@ namespace Registration.API.Migrations
 
                     b.Property<int>("ShirtSizeId");
 
-                    b.Property<int>("SubgroupId");
-
                     b.Property<bool>("Triathlon");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ShirtSizeId");
-
-                    b.HasIndex("SubgroupId");
 
                     b.ToTable("Attendees");
                 });
@@ -292,11 +289,6 @@ namespace Registration.API.Migrations
                     b.HasOne("Registration.API.Entities.ShirtSize", "ShirtSize")
                         .WithMany()
                         .HasForeignKey("ShirtSizeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Registration.API.Entities.Subgroup", "Subgroup")
-                        .WithMany("Attendees")
-                        .HasForeignKey("SubgroupId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

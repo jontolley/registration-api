@@ -26,5 +26,8 @@ namespace Registration.API.Entities
         
         public ICollection<UserSubgroup> UserSubgroups { get; set; }
                = new List<UserSubgroup>();
+
+        public ICollection<Attendee> Attendees { get; set; }
+               = new List<Attendee>();
     }
 }

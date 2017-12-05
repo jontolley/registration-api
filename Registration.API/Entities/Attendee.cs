@@ -12,6 +12,11 @@ namespace Registration.API.Entities
         public int Id { get; set; }
 
         [Required]
+        [ForeignKey("SubgroupId")]
+        public Subgroup Subgroup { get; set; }
+        public int SubgroupId { get; set; }
+
+        [Required]
         [MaxLength(50)]
         public string FirstName { get; set; }
 
@@ -22,8 +27,9 @@ namespace Registration.API.Entities
         [Required]
         public bool IsAdult { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
+        [Required]
         public bool Triathlon { get; set; }
         
         [Required]

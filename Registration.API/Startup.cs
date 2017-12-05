@@ -105,10 +105,18 @@ namespace Registration.API
                 cfg.CreateMap<Models.SubgroupForCreationDto, Entities.Subgroup>();
                 cfg.CreateMap<Models.SubgroupForUpdateDto, Entities.Subgroup>();
 
+                cfg.CreateMap<Models.AccommodationDto, Entities.Accommodation>();
+                cfg.CreateMap<Models.MeritBadgeDto, Entities.MeritBadge>();
+                cfg.CreateMap<Models.ShirtSizeDto, Entities.ShirtSize>();
+
+                cfg.CreateMap<Entities.Attendee, Models.AttendeeStubDto>();
+                cfg.CreateMap<Entities.Attendee, Models.AttendeeDto>().ConvertUsing<AttendeeToAttendeeDtoConverter>();
+                cfg.CreateMap<Models.AttendeeForCreationDto, Entities.Attendee>().ConvertUsing<AttendeeForCreationDtoToAttendeeConverter>();
+                //cfg.CreateMap<Models.AttendeeForUpdateDto, Entities.Attendee>().ConvertUsing<AttendeeForUpdateDtoToAttendeeConverter>();
+
                 cfg.CreateMap<Entities.User, Models.UserDto>();
                 cfg.CreateMap<Entities.User, Models.UserWithRolesDto>().ConvertUsing<UserToUserWithRolesDtoConverter>();
                 cfg.CreateMap<Entities.User, Models.UserWithSubgroupsDto>().ConvertUsing<UserToUserWithSubgroupsDtoConverter>();
-
                 cfg.CreateMap<Entities.User, Models.UserForUpdateDto>();
                 cfg.CreateMap<Models.UserForCreationDto, Entities.User>();
                 cfg.CreateMap<Models.UserForUpdateDto, Entities.User>();
