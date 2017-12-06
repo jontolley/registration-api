@@ -13,6 +13,7 @@ namespace Registration.API.Entities
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
+
         public ICollection<AttendeeMeritBadge> AttendeeMeritBadges { get; set; }
                = new List<AttendeeMeritBadge>();
     }

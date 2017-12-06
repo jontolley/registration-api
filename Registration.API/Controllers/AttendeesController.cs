@@ -9,11 +9,11 @@ using System.Linq;
 namespace Registration.API.Controllers
 {
     [Route("api/groups")]
-    public class AttendeeController : Controller
+    public class AttendeesController : Controller
     {
         private IRegistrationRepository _registrationRepository;
 
-        public AttendeeController(IRegistrationRepository registrationRepository)
+        public AttendeesController(IRegistrationRepository registrationRepository)
         {
             _registrationRepository = registrationRepository;
         }

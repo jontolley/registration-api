@@ -28,6 +28,8 @@ namespace Registration.API.Services
         IEnumerable<Attendee> GetAttendees(int subgroupId);
         Attendee GetAttendee(int subgroupId, int attendeeId);
         void AddAttendee(Attendee attendee);
+        void RemoveAllMeritBadges(Attendee attendee);
+        void RemoveAllAccommodations(Attendee attendee);
 
         bool UserExists(int userId);
         bool UserExists(string subscriberId);

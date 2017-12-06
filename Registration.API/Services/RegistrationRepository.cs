@@ -241,6 +241,24 @@ namespace Registration.API.Services
 
             _context.Attendees.Add(attendee);
         }
+
+        public void RemoveAllMeritBadges(Attendee attendee)
+        {
+            var allAttendeeMeritBadges = _context.AttendeeMeritBadges.Where(amb => amb.AttendeeId == attendee.Id);
+            foreach (var attendeeMeritBadge in allAttendeeMeritBadges)
+            {
+                _context.AttendeeMeritBadges.Remove(attendeeMeritBadge);
+            }
+        }
+
+        public void RemoveAllAccommodations(Attendee attendee)
+        {
+            var allAttendeeAccommodations = _context.AttendeeAccommodations.Where(aa => aa.AttendeeId == attendee.Id);
+            foreach (var attendeeAccommodation in allAttendeeAccommodations)
+            {
+                _context.AttendeeAccommodations.Remove(attendeeAccommodation);
+            }
+        }
         #endregion Attendee methods
 
         #region Support methods
