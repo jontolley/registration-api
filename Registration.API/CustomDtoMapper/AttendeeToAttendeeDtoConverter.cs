@@ -19,7 +19,8 @@ namespace Registration.API.CustomDtoMapper
                 meritBadges.Add(new MeritBadgeDto
                 {
                     Id = attendeeMeritBadge.MeritBadge.Id,
-                    Name = attendeeMeritBadge.MeritBadge.Name
+                    Name = attendeeMeritBadge.MeritBadge.Name,
+                    SortOrder = attendeeMeritBadge.SortOrder
                 });
             }
 
@@ -33,6 +34,7 @@ namespace Registration.API.CustomDtoMapper
             }
 
             attendeeDto.Id = attendee.Id;
+            attendeeDto.SubgroupId = attendee.SubgroupId;
             attendeeDto.FirstName = attendee.FirstName;
             attendeeDto.LastName = attendee.LastName;
             attendeeDto.IsAdult = attendee.IsAdult;

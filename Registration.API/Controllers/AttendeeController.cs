@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Registration.API.Services;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Registration.API.Models;
+using Registration.API.Services;
+using System.Collections.Generic;
 
 namespace Registration.API.Controllers
 {
@@ -19,6 +15,16 @@ namespace Registration.API.Controllers
         public AttendeeController(IRegistrationRepository registrationRepository)
         {
             _registrationRepository = registrationRepository;
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpGet("{groupId}/subgroups/{subgroupId}/attendeestubs", Name = "GetAttendeeStubs")]
+        public IActionResult GetAttendeeStubs(int groupId, int subgroupId)
+        {
+            var attendeeEntities = _registrationRepository.GetAttendees(subgroupId);
+            var attendeeStubDtos = Mapper.Map<IEnumerable<AttendeeStubDto>>(attendeeEntities);
+
+            return Ok(attendeeStubDtos);
         }
 
         [Authorize(Policy = "User")]
@@ -64,36 +70,18 @@ namespace Registration.API.Controllers
 
             _registrationRepository.AddAttendee(attendeeEntity);
 
-            // TODO: add Merit Badges
-            // TODO: add Accommidations
-
             if (!_registrationRepository.Save())
             {
                 return StatusCode(500, "A problem happened while handling your request.");
             }
+
+            // Load all Accomodations and Merit Badges
+            attendeeEntity = _registrationRepository.GetAttendee(attendeeEntity.SubgroupId, attendeeEntity.Id);
 
             var createdAttendeeToReturn = Mapper.Map<AttendeeDto>(attendeeEntity);
             
             return CreatedAtRoute("GetAttendee", new
             { groupId = groupId, subgroupId = subgroupId, attendeeId = createdAttendeeToReturn.Id }, createdAttendeeToReturn);
         }
-
-        //// POST: api/Attendee
-        //[HttpPost]
-        //public void Post([FromBody]string value)
-        //{
-        //}
-
-        //// PUT: api/Attendee/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody]string value)
-        //{
-        //}
-
-        //// DELETE: api/ApiWithActions/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
     }
 }

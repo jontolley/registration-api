@@ -212,7 +212,8 @@ namespace Registration.API.Services
         #region Attendee methods
         public IEnumerable<Attendee> GetAttendees(int subgroupId)
         {
-            return _context.Attendees.Include(a => a.ShirtSize)
+            return _context.Attendees
+                .Include(a => a.ShirtSize)
                 .Include(a => a.AttendeeMeritBadges).ThenInclude(ab => ab.MeritBadge)
                 .Include(a => a.AttendeeAccommodations).ThenInclude(aa => aa.Accommodation)
                 .Where(a => a.SubgroupId == subgroupId);
@@ -220,7 +221,8 @@ namespace Registration.API.Services
 
         public Attendee GetAttendee(int subgroupId, int attendeeId)
         {
-            return _context.Attendees.Include(a => a.ShirtSize)
+            return _context.Attendees
+                .Include(a => a.ShirtSize)
                 .Include(a => a.AttendeeMeritBadges).ThenInclude(ab => ab.MeritBadge)
                 .Include(a => a.AttendeeAccommodations).ThenInclude(aa => aa.Accommodation)
                 .FirstOrDefault(a => a.SubgroupId == subgroupId && a.Id == attendeeId);
@@ -228,6 +230,15 @@ namespace Registration.API.Services
 
         public void AddAttendee(Attendee attendee)
         {
+            attendee.SubgroupId = attendee.SubgroupId == 0 ? attendee.Subgroup.Id : attendee.SubgroupId;
+            attendee.Subgroup = null;
+
+            if (attendee.ShirtSize != null)
+            {
+                var shirtSize = _context.ShirtSizes.FirstOrDefault(s => s.Size == attendee.ShirtSize.Size);
+                attendee.ShirtSize = shirtSize;
+            }
+
             _context.Attendees.Add(attendee);
         }
         #endregion Attendee methods

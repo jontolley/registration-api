@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Registration.API.Entities;
 using Registration.API.Models;
-using Registration.API.Services;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Registration.API.CustomDtoMapper
 {
@@ -29,14 +27,14 @@ namespace Registration.API.CustomDtoMapper
                 }
             }
 
-            if (attendee.AttendeeAccommodations != null)
+            if (attendeeForCreationDto.Accommodations != null)
             {
-                foreach (var attendeeAccommodation in attendee.AttendeeAccommodations)
+                foreach (var accommodation in attendeeForCreationDto.Accommodations)
                 {
                     attendeeAccommodations.Add(new AttendeeAccommodation
                     {
                         Attendee = attendee,
-                        AccommodationId = attendeeAccommodation.Id
+                        AccommodationId = accommodation.Id
                     });
                 }
             }
@@ -44,6 +42,7 @@ namespace Registration.API.CustomDtoMapper
             // TODO: Get ShirtSize from repo because this will create a duplicate
             var shirtSize = new ShirtSize { Size = attendeeForCreationDto.ShirtSize };
 
+            attendee.SubgroupId = attendeeForCreationDto.SubgroupId;
             attendee.FirstName = attendeeForCreationDto.FirstName;
             attendee.LastName = attendeeForCreationDto.LastName;
             attendee.IsAdult = attendeeForCreationDto.IsAdult;
