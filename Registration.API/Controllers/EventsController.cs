@@ -22,10 +22,6 @@ namespace Registration.API.Controllers
         [HttpGet]
         public IActionResult GetEvents()
         {
-            var x = User;
-
-            var y = HttpContext.User;
-
             var eventEntities = _registrationRepository.GetEvents();
             var eventDtos = Mapper.Map<IEnumerable<EventDto>>(eventEntities);
 

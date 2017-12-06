@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Registration.API.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,7 +22,7 @@ namespace Registration.API.Services
 
         public IEnumerable<Event> GetEvents()
         {
-            return _context.Events.OrderBy(e => e.Name).ToList();
+            return _context.Events.OrderBy(e => e.Name);
         }
 
         public Event GetEvent(int eventId)
@@ -48,7 +49,7 @@ namespace Registration.API.Services
 
         public IEnumerable<Group> GetGroups()
         {
-            return _context.Groups.OrderBy(g => g.Name).ToList();
+            return _context.Groups.OrderBy(g => g.Name);
         }
 
         public Group GetGroup(int groupId, bool includeSubgroups)
@@ -86,7 +87,7 @@ namespace Registration.API.Services
 
         public IEnumerable<Subgroup> GetSubgroups(int groupId)
         {
-            return _context.Subgroups.Where(s => s.GroupId == groupId).OrderBy(s => s.Name).ToList();
+            return _context.Subgroups.Where(s => s.GroupId == groupId).OrderBy(s => s.Name);
         }
 
         public Subgroup GetSubgroup(int groupId, int subgroupId)
@@ -119,7 +120,7 @@ namespace Registration.API.Services
 
         public IEnumerable<User> GetUsers()
         {
-            return _context.Users.OrderBy(e => e.Name).ToList();
+            return _context.Users.OrderBy(e => e.Name);
         }
 
         public User GetUser(int userId, bool includeRoles = false, bool includeSubgroups = false)
@@ -269,14 +270,32 @@ namespace Registration.API.Services
 
         public IQueryable<MeritBadge> GetMeritBadges()
         {
-            return _context.MeritBadges;
+            return _context.MeritBadges.OrderBy(mb => mb.Name);
         }
 
         public IQueryable<Accommodation> GetAccommodations()
         {
-            return _context.Accommodations;
+            return _context.Accommodations.OrderBy(a => a.Name);
         }
         #endregion Support methods
+
+        #region Contact methods
+        public IEnumerable<Contact> GetContacts()
+        {
+            return _context.Contacts.OrderBy(c => c.ReceivedDateTime);
+        }
+
+        public Contact GetContact(int Id)
+        {
+            return _context.Contacts.FirstOrDefault(c => c.Id == Id);
+        }
+
+        public void AddContact(Contact contact)
+        {
+            contact.ReceivedDateTime = DateTime.Now;
+            _context.Contacts.Add(contact);
+        }
+        #endregion Contact methods
 
         public bool Save()
         {

@@ -69,7 +69,11 @@ namespace Registration.API
 
             services.AddScoped<IRegistrationRepository, RegistrationRepository>();
             services.AddScoped<IRegistrationAuthorizationService, RegistrationAuthorizationService>();
+#if DEBUG
+            services.AddScoped<IEmailService, MockEmailService>();
+#else
             services.AddScoped<IEmailService, SendGridService>();
+#endif
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -123,6 +127,9 @@ namespace Registration.API
                 cfg.CreateMap<Entities.User, Models.UserForUpdateDto>();
                 cfg.CreateMap<Models.UserForCreationDto, Entities.User>();
                 cfg.CreateMap<Models.UserForUpdateDto, Entities.User>();
+
+                cfg.CreateMap<Entities.Contact, Models.ContactDto>();
+                cfg.CreateMap<Models.ContactForCreationDto, Entities.Contact>();
             });
             
             app.UseMvc();

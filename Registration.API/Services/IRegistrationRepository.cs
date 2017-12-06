@@ -46,6 +46,10 @@ namespace Registration.API.Services
         void AddAssignment(UserSubgroup userSubgroup);
         void RemoveAllAssignments(User user);
 
+        IEnumerable<Contact> GetContacts();
+        Contact GetContact(int Id);
+        void AddContact(Contact contact);
+
         IQueryable<ShirtSize> GetShirtSizes();
         IQueryable<MeritBadge> GetMeritBadges();
         IQueryable<Accommodation> GetAccommodations();

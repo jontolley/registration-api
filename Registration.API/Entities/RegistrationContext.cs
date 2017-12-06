@@ -42,5 +42,6 @@ namespace Registration.API.Entities
         public DbSet<User> Users { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<UserSubgroup> UserSubgroups { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
     }
 }
