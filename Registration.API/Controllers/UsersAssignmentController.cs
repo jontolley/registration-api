@@ -5,28 +5,30 @@ using Registration.API.Entities;
 using Registration.API.Models;
 using Registration.API.Services;
 using System;
-using System.Security.Claims;
 
 namespace Registration.API.Controllers
 {
-    [Route("api/users")]
+    [Route("api/users/current/assignment")]
     public class UsersAssignmentController : Controller
     {
         private IRegistrationRepository _registrationRepository;
+        private IRegistrationAuthorizationService _registrationAuthorizationService;
+
         private const string _userRoleName = "user";
 
-        public UsersAssignmentController(IRegistrationRepository registrationRepository)
+        public UsersAssignmentController(IRegistrationRepository registrationRepository, IRegistrationAuthorizationService registrationAuthorizationService)
         {
             _registrationRepository = registrationRepository;
+            _registrationAuthorizationService = registrationAuthorizationService;
         }
 
         [Authorize]
-        [HttpGet("assignment")]
+        [HttpGet]
         public IActionResult GetCurrentUser()
         {
             try
             {
-                var userIdentifier = GetCurrentUserIdentifier();
+                var userIdentifier = _registrationAuthorizationService.GetCurrentUserIdentifier(User);
                 if (userIdentifier == null)
                 {
                     return BadRequest();
@@ -49,7 +51,7 @@ namespace Registration.API.Controllers
         }
 
         [Authorize]
-        [HttpPost("assignment")]
+        [HttpPost]
         public IActionResult AssignUser([FromBody] UserSubgroupDto userSubgroupDto)
         {
             if (userSubgroupDto == null)
@@ -64,7 +66,7 @@ namespace Registration.API.Controllers
 
             try
             {
-                var userIdentifier = GetCurrentUserIdentifier();
+                var userIdentifier = _registrationAuthorizationService.GetCurrentUserIdentifier(User);
                 if (userIdentifier == null)
                 {
                     return BadRequest();
@@ -123,16 +125,6 @@ namespace Registration.API.Controllers
             {
                 return StatusCode(500, "A problem happened while handling your request.");
             }
-        }
-        
-        private string GetCurrentUserIdentifier()
-        {
-            if (!User.HasClaim(c => c.Type == ClaimTypes.NameIdentifier && c.Issuer == "https://tolleyfam.auth0.com/"))
-            {
-                return null;
-            }
-
-            return User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier && c.Issuer == "https://tolleyfam.auth0.com/").Value;
         }
     }
 }

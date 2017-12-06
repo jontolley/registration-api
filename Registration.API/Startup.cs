@@ -68,6 +68,7 @@ namespace Registration.API
             services.AddDbContext<RegistrationContext>(o => o.UseSqlServer(connectionString));
 
             services.AddScoped<IRegistrationRepository, RegistrationRepository>();
+            services.AddScoped<IRegistrationAuthorizationService, RegistrationAuthorizationService>();
             services.AddScoped<IEmailService, SendGridService>();
         }
 

@@ -8,27 +8,28 @@ using Registration.API.Models;
 using Registration.API.Services;
 using System;
 using System.Data.SqlClient;
-using System.Security.Claims;
 
 namespace Registration.API.Controllers
 {
-    [Route("api/users")]
+    [Route("api/users/current")]
     public class UsersCurrentController : Controller
     {
         private IRegistrationRepository _registrationRepository;
+        private IRegistrationAuthorizationService _registrationAuthorizationService;
 
-        public UsersCurrentController(IRegistrationRepository registrationRepository)
+        public UsersCurrentController(IRegistrationRepository registrationRepository, IRegistrationAuthorizationService registrationAuthorizationService)
         {
             _registrationRepository = registrationRepository;
+            _registrationAuthorizationService = registrationAuthorizationService;
         }
 
         [Authorize]
-        [HttpGet("current")]
+        [HttpGet]
         public IActionResult GetCurrentUser()
         {
             try
             {
-                var userIdentifier = GetCurrentUserIdentifier();
+                var userIdentifier = _registrationAuthorizationService.GetCurrentUserIdentifier(User);
                 if (userIdentifier == null)
                 {
                     return BadRequest();
@@ -50,7 +51,7 @@ namespace Registration.API.Controllers
         }
 
         [Authorize]
-        [HttpPost("current")]
+        [HttpPost]
         public IActionResult CreateUser([FromBody] UserForCreationDto userForCreationDto)
         {
             if (userForCreationDto == null)
@@ -65,7 +66,7 @@ namespace Registration.API.Controllers
 
             try
             {
-                var userIdentifier = GetCurrentUserIdentifier();
+                var userIdentifier = _registrationAuthorizationService.GetCurrentUserIdentifier(User);
                 if (userIdentifier == null || userIdentifier != userForCreationDto.SubscriberId)
                 {
                     return BadRequest();
@@ -103,7 +104,7 @@ namespace Registration.API.Controllers
         }
 
         [Authorize]
-        [HttpPut("current")]
+        [HttpPut]
         public IActionResult UpdateUser([FromBody] UserForUpdateDto userForUpdateDto)
         {
             if (userForUpdateDto == null)
@@ -116,7 +117,7 @@ namespace Registration.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userIdentifier = GetCurrentUserIdentifier();
+            var userIdentifier = _registrationAuthorizationService.GetCurrentUserIdentifier(User);
             if (userIdentifier == null || userIdentifier != userForUpdateDto.SubscriberId)
             {
                 return BadRequest();
@@ -157,7 +158,7 @@ namespace Registration.API.Controllers
         }
 
         [Authorize]
-        [HttpPatch("current")]
+        [HttpPatch]
         public IActionResult PartiallyUpdateUser([FromBody] JsonPatchDocument<UserForUpdateDto> patchDoc)
         {
             if (patchDoc == null)
@@ -165,7 +166,7 @@ namespace Registration.API.Controllers
                 return BadRequest();
             }
 
-            var userIdentifier = GetCurrentUserIdentifier();
+            var userIdentifier = _registrationAuthorizationService.GetCurrentUserIdentifier(User);
             if (userIdentifier == null)
             {
                 return BadRequest();
@@ -217,16 +218,6 @@ namespace Registration.API.Controllers
             {
                 return StatusCode(500, "A problem happened while handling your request.");
             }
-        }
-
-        private string GetCurrentUserIdentifier()
-        {
-            if (!User.HasClaim(c => c.Type == ClaimTypes.NameIdentifier && c.Issuer == "https://tolleyfam.auth0.com/"))
-            {
-                return null;
-            }
-
-            return User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier && c.Issuer == "https://tolleyfam.auth0.com/").Value;
         }
     }
 }

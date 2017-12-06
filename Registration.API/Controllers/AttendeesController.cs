@@ -12,16 +12,29 @@ namespace Registration.API.Controllers
     public class AttendeesController : Controller
     {
         private IRegistrationRepository _registrationRepository;
+        private IRegistrationAuthorizationService _registrationAuthorizationService;
 
-        public AttendeesController(IRegistrationRepository registrationRepository)
+        public AttendeesController(IRegistrationRepository registrationRepository, IRegistrationAuthorizationService registrationAuthorizationService)
         {
             _registrationRepository = registrationRepository;
+            _registrationAuthorizationService = registrationAuthorizationService;
         }
 
         [Authorize(Policy = "User")]
         [HttpGet("{groupId}/subgroups/{subgroupId}/attendeestubs", Name = "GetAttendeeStubs")]
         public IActionResult GetAttendeeStubs(int groupId, int subgroupId)
         {
+            var userIdentifier = _registrationAuthorizationService.GetCurrentUserIdentifier(User);
+            if (userIdentifier == null)
+            {
+                return BadRequest();
+            }
+
+            if(!_registrationAuthorizationService.IsAuthorized(userIdentifier, subgroupId))
+            {
+                return Unauthorized();
+            }
+
             var attendeeEntities = _registrationRepository.GetAttendees(subgroupId);
             var attendeeStubDtos = Mapper.Map<IEnumerable<AttendeeStubDto>>(attendeeEntities);
 
@@ -32,6 +45,17 @@ namespace Registration.API.Controllers
         [HttpGet("{groupId}/subgroups/{subgroupId}/attendees", Name = "GetAttendees")]
         public IActionResult GetAttendees(int groupId, int subgroupId)
         {
+            var userIdentifier = _registrationAuthorizationService.GetCurrentUserIdentifier(User);
+            if (userIdentifier == null)
+            {
+                return BadRequest();
+            }
+
+            if (!_registrationAuthorizationService.IsAuthorized(userIdentifier, subgroupId))
+            {
+                return Unauthorized();
+            }
+
             var attendeeEntities = _registrationRepository.GetAttendees(subgroupId);
             var attendeeDtos = Mapper.Map<IEnumerable<AttendeeDto>>(attendeeEntities);
 
@@ -42,6 +66,17 @@ namespace Registration.API.Controllers
         [HttpGet("{groupId}/subgroups/{subgroupId}/attendees/{attendeeId}", Name = "GetAttendee")]
         public IActionResult GetAttendee(int groupId, int subgroupId, int attendeeId)
         {
+            var userIdentifier = _registrationAuthorizationService.GetCurrentUserIdentifier(User);
+            if (userIdentifier == null)
+            {
+                return BadRequest();
+            }
+
+            if (!_registrationAuthorizationService.IsAuthorized(userIdentifier, subgroupId))
+            {
+                return Unauthorized();
+            }
+
             var attendeeEntity = _registrationRepository.GetAttendee(subgroupId, attendeeId);
             var attendeeDto = Mapper.Map<AttendeeDto>(attendeeEntity);
 
@@ -60,6 +95,17 @@ namespace Registration.API.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            var userIdentifier = _registrationAuthorizationService.GetCurrentUserIdentifier(User);
+            if (userIdentifier == null)
+            {
+                return BadRequest();
+            }
+
+            if (!_registrationAuthorizationService.IsAuthorized(userIdentifier, subgroupId))
+            {
+                return Unauthorized();
             }
 
             if (!(_registrationRepository.GroupExists(groupId) && _registrationRepository.SubgroupExists(groupId, subgroupId)))
@@ -99,6 +145,17 @@ namespace Registration.API.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            var userIdentifier = _registrationAuthorizationService.GetCurrentUserIdentifier(User);
+            if (userIdentifier == null)
+            {
+                return BadRequest();
+            }
+
+            if (!_registrationAuthorizationService.IsAuthorized(userIdentifier, subgroupId))
+            {
+                return Unauthorized();
             }
 
             var attendeeEntity = _registrationRepository.GetAttendee(subgroupId, attendeeId);

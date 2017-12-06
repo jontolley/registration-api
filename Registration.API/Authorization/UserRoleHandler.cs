@@ -9,17 +9,19 @@ namespace Registration.API
 {
     internal class UserRoleHandler : AuthorizationHandler<UserRoleRequirement>
     {
+        private const string _claimsIssuer = "https://tolleyfam.auth0.com/";
+
         public UserRoleHandler()
         { }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, UserRoleRequirement requirement)
         {
-            if (!context.User.HasClaim(c => c.Type == ClaimTypes.NameIdentifier && c.Issuer == "https://tolleyfam.auth0.com/"))
+            if (!context.User.HasClaim(c => c.Type == ClaimTypes.NameIdentifier && c.Issuer == _claimsIssuer))
             {
                 return Task.CompletedTask;
             }
             
-            var userIdentifier = context.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier && c.Issuer == "https://tolleyfam.auth0.com/").Value;
+            var userIdentifier = context.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier && c.Issuer == _claimsIssuer).Value;
 
             var contextFactory = new RegistrationDesignTimeContextFactory();
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,6 +17,11 @@ namespace Registration.API.Entities
 
         [MaxLength(100)]
         public string Name { get; set; }
+
+        internal static bool HasClaim(Func<object, object> p)
+        {
+            throw new NotImplementedException();
+        }
 
         [MaxLength(100)]
         public string Nickname { get; set; }
