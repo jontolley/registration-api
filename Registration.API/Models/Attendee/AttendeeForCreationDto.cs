@@ -29,6 +29,6 @@ namespace Registration.API.Models
 
         public ICollection<AccommodationDto> Accommodations { get; set; }
 
-        public ICollection<MeritBadgeDto> MeritBadges { get; set; }
+        public ICollection<MeritBadgeForCreationDto> MeritBadges { get; set; }
     }
 }

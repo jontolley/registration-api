@@ -80,8 +80,7 @@ namespace Registration.API.Controllers
 
         [Authorize(Policy = "Admin")]
         [HttpPut("{id}")]
-        public IActionResult UpdateGroup(int id,
-            [FromBody] GroupForUpdateDto groupDto)
+        public IActionResult UpdateGroup(int id, [FromBody] GroupForUpdateDto groupDto)
         {
             if (groupDto == null)
             {
@@ -111,8 +110,7 @@ namespace Registration.API.Controllers
 
         [Authorize(Policy = "Admin")]
         [HttpPatch("{id}")]
-        public IActionResult PartiallyUpdateGroup(int id,
-            [FromBody] JsonPatchDocument<GroupForUpdateDto> patchDoc)
+        public IActionResult PartiallyUpdateGroup(int id, [FromBody] JsonPatchDocument<GroupForUpdateDto> patchDoc)
         {
             if (patchDoc == null)
             {

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Registration.API.Models;
 using Registration.API.Services;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Registration.API.Controllers
 {
@@ -51,7 +52,7 @@ namespace Registration.API.Controllers
         [HttpPost("{groupId}/subgroups/{subgroupId}/attendees", Name = "CreateAttendee")]
         public IActionResult CreateAttendee(int groupId, int subgroupId, [FromBody] AttendeeForCreationDto attendeeForCreationDto)
         {
-            if (attendeeForCreationDto == null)
+            if (attendeeForCreationDto == null || attendeeForCreationDto.SubgroupId != subgroupId)
             {
                 return BadRequest();
             }
@@ -67,6 +68,8 @@ namespace Registration.API.Controllers
             }
 
             var attendeeEntity = Mapper.Map<Entities.Attendee>(attendeeForCreationDto);
+            var shirtSize = _registrationRepository.GetShirtSizes().FirstOrDefault(ss => ss.Size == attendeeForCreationDto.ShirtSize);
+            attendeeEntity.ShirtSize = shirtSize;
 
             _registrationRepository.AddAttendee(attendeeEntity);
 
@@ -79,9 +82,41 @@ namespace Registration.API.Controllers
             attendeeEntity = _registrationRepository.GetAttendee(attendeeEntity.SubgroupId, attendeeEntity.Id);
 
             var createdAttendeeToReturn = Mapper.Map<AttendeeDto>(attendeeEntity);
-            
+
             return CreatedAtRoute("GetAttendee", new
             { groupId = groupId, subgroupId = subgroupId, attendeeId = createdAttendeeToReturn.Id }, createdAttendeeToReturn);
+        }
+
+        [Authorize(Policy = "User")]
+        [HttpPut("{groupId}/subgroups/{subgroupId}/attendees/{attendeeId}", Name = "UpdateAttendee")]
+        public IActionResult UpdateAttendee(int groupId, int subgroupId, int attendeeId, [FromBody] AttendeeForUpdateDto attendeeForUpdateDto)
+        {
+            if (attendeeForUpdateDto == null || attendeeForUpdateDto.SubgroupId != subgroupId)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var attendeeEntity = _registrationRepository.GetAttendee(subgroupId, attendeeId);
+            if (attendeeEntity == null)
+            {
+                return NotFound();
+            }
+
+            Mapper.Map(attendeeForUpdateDto, attendeeEntity);
+            var shirtSize = _registrationRepository.GetShirtSizes().FirstOrDefault(ss => ss.Size == attendeeForUpdateDto.ShirtSize);
+            attendeeEntity.ShirtSize = shirtSize;
+
+            if (!_registrationRepository.Save())
+            {
+                return StatusCode(500, "A problem happened while handling your request.");
+            }
+
+            return NoContent();
         }
     }
 }

@@ -16,13 +16,14 @@ namespace Registration.API.CustomDtoMapper
 
             if (attendeeForCreationDto.MeritBadges != null)
             {
+                var sortOrder = 1;
                 foreach (var meritBadge in attendeeForCreationDto.MeritBadges)
                 {
                     attendeeMeritBadges.Add(new AttendeeMeritBadge
                     {
                         Attendee = attendee,
                         MeritBadgeId = meritBadge.Id,
-                        SortOrder = meritBadge.SortOrder
+                        SortOrder = sortOrder++
                     });
                 }
             }

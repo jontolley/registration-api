@@ -26,9 +26,5 @@ namespace Registration.API.Models
 
         [Required(ErrorMessage = "You must provide a Shrit Size.")]
         public string ShirtSize { get; set; }
-
-        public ICollection<AccommodationDto> Accommodations { get; set; }
-
-        public ICollection<MeritBadgeDto> MeritBadges { get; set; }
     }
 }

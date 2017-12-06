@@ -112,7 +112,7 @@ namespace Registration.API
                 cfg.CreateMap<Entities.Attendee, Models.AttendeeStubDto>();
                 cfg.CreateMap<Entities.Attendee, Models.AttendeeDto>().ConvertUsing<AttendeeToAttendeeDtoConverter>();
                 cfg.CreateMap<Models.AttendeeForCreationDto, Entities.Attendee>().ConvertUsing<AttendeeForCreationDtoToAttendeeConverter>();
-                //cfg.CreateMap<Models.AttendeeForUpdateDto, Entities.Attendee>().ConvertUsing<AttendeeForUpdateDtoToAttendeeConverter>();
+                cfg.CreateMap<Models.AttendeeForUpdateDto, Entities.Attendee>().ConvertUsing<AttendeeForUpdateDtoToAttendeeConverter>();
 
                 cfg.CreateMap<Entities.User, Models.UserDto>();
                 cfg.CreateMap<Entities.User, Models.UserWithRolesDto>().ConvertUsing<UserToUserWithRolesDtoConverter>();
