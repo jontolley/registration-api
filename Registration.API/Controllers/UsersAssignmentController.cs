@@ -26,12 +26,11 @@ namespace Registration.API.Controllers
         {
             try
             {
-                if (!User.HasClaim(c => c.Type == ClaimTypes.NameIdentifier && c.Issuer == "https://tolleyfam.auth0.com/"))
+                var userIdentifier = GetCurrentUserIdentifier();
+                if (userIdentifier == null)
                 {
-                    return NotFound();
+                    return BadRequest();
                 }
-
-                var userIdentifier = User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier && c.Issuer == "https://tolleyfam.auth0.com/").Value;
 
                 var user = _registrationRepository.GetUser(userIdentifier, includeRoles:false, includeSubgroups:true);
 
@@ -65,15 +64,13 @@ namespace Registration.API.Controllers
 
             try
             {
-                if (!User.HasClaim(c => c.Type == ClaimTypes.NameIdentifier && c.Issuer == "https://tolleyfam.auth0.com/"))
+                var userIdentifier = GetCurrentUserIdentifier();
+                if (userIdentifier == null)
                 {
                     return BadRequest();
                 }
 
-                var userIdentifier = User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier && c.Issuer == "https://tolleyfam.auth0.com/").Value;
-
                 var user = _registrationRepository.GetUser(userIdentifier, includeRoles: false, includeSubgroups: true);
-
                 if (user == null)
                 {
                     return NotFound();
@@ -126,6 +123,16 @@ namespace Registration.API.Controllers
             {
                 return StatusCode(500, "A problem happened while handling your request.");
             }
+        }
+        
+        private string GetCurrentUserIdentifier()
+        {
+            if (!User.HasClaim(c => c.Type == ClaimTypes.NameIdentifier && c.Issuer == "https://tolleyfam.auth0.com/"))
+            {
+                return null;
+            }
+
+            return User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier && c.Issuer == "https://tolleyfam.auth0.com/").Value;
         }
     }
 }

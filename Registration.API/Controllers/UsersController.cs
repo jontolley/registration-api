@@ -53,7 +53,7 @@ namespace Registration.API.Controllers
             return Ok(userResult);
         }
 
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [HttpPost]
         public IActionResult CreateUser([FromBody] UserForCreationDto userDto)
         {
@@ -100,11 +100,11 @@ namespace Registration.API.Controllers
             }
         }
 
-        [Authorize]
-        [HttpPut("{id}")]
-        public IActionResult UpdateUser(int id, [FromBody] UserForUpdateDto userDto)
+        [Authorize(Policy = "Admin")]
+        [HttpPut("{subscriberId}", Name = "UpdateUser")]
+        public IActionResult UpdateUser(string subscriberId, [FromBody] UserForUpdateDto userForUpdateDto)
         {
-            if (userDto == null)
+            if (userForUpdateDto == null || userForUpdateDto.SubscriberId != subscriberId)
             {
                 return BadRequest();
             }
@@ -114,7 +114,7 @@ namespace Registration.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userEntity = _registrationRepository.GetUser(id);
+            var userEntity = _registrationRepository.GetUser(userForUpdateDto.SubscriberId);
             if (userEntity == null)
             {
                 return NotFound();
@@ -122,7 +122,7 @@ namespace Registration.API.Controllers
 
             try
             {
-                Mapper.Map(userDto, userEntity);
+                Mapper.Map(userForUpdateDto, userEntity);
 
                 if (!_registrationRepository.Save())
                 {
@@ -148,16 +148,16 @@ namespace Registration.API.Controllers
             }
         }
 
-        [Authorize]
-        [HttpPatch("{id}")]
-        public IActionResult PartiallyUpdateUser(int id, [FromBody] JsonPatchDocument<UserForUpdateDto> patchDoc)
+        [Authorize(Policy = "Admin")]
+        [HttpPatch("{subscriberId}", Name = "PartiallyUpdateUser")]
+        public IActionResult PartiallyUpdateUser(string subscriberId, [FromBody] JsonPatchDocument<UserForUpdateDto> patchDoc)
         {
             if (patchDoc == null)
             {
                 return BadRequest();
             }
 
-            var userEntity = _registrationRepository.GetUser(id);
+            var userEntity = _registrationRepository.GetUser(subscriberId);
             if (userEntity == null)
             {
                 return NotFound();
@@ -201,10 +201,10 @@ namespace Registration.API.Controllers
         }
 
         [Authorize(Policy = "Admin")]
-        [HttpDelete("{id}")]
-        public IActionResult DeleteUser(int id)
+        [HttpDelete("{subscriberId}", Name = "DeleteUser")]
+        public IActionResult DeleteUser(string subscriberId)
         {
-            var userEntity = _registrationRepository.GetUser(id);
+            var userEntity = _registrationRepository.GetUser(subscriberId);
             if (userEntity == null)
             {
                 return NotFound();
