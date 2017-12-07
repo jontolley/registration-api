@@ -11,9 +11,10 @@ using System;
 namespace Registration.API.Migrations
 {
     [DbContext(typeof(RegistrationContext))]
-    partial class RegistrationContextModelSnapshot : ModelSnapshot
+    [Migration("20171207002417_AddSortOrderToShirtSize")]
+    partial class AddSortOrderToShirtSize
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

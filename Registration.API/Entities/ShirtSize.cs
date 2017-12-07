@@ -12,5 +12,8 @@ namespace Registration.API.Entities
         [Required]
         [MaxLength(50)]
         public string Size { get; set; }
+
+        [Required]
+        public int SortOrder { get; set; }
     }
 }

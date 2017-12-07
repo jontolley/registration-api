@@ -6,7 +6,6 @@ using Registration.API.Models;
 using Registration.API.Services;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 
 namespace Registration.API.Controllers
 {

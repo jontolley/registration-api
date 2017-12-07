@@ -265,7 +265,7 @@ namespace Registration.API.Services
         #region Support methods
         public IQueryable<ShirtSize> GetShirtSizes()
         {
-            return _context.ShirtSizes;
+            return _context.ShirtSizes.OrderBy(s => s.SortOrder);
         }
 
         public IQueryable<MeritBadge> GetMeritBadges()

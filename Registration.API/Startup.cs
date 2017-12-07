@@ -110,11 +110,14 @@ namespace Registration.API
                 cfg.CreateMap<Models.SubgroupForCreationDto, Entities.Subgroup>();
                 cfg.CreateMap<Models.SubgroupForUpdateDto, Entities.Subgroup>();
 
+
+                cfg.CreateMap<Entities.Accommodation, Models.AccommodationDto>();
+                cfg.CreateMap<Entities.MeritBadge, Models.MeritBadgeDto>();
+                cfg.CreateMap<Entities.MeritBadge, Models.MeritBadgeForCreationDto>();
+                cfg.CreateMap<Entities.ShirtSize, Models.ShirtSizeDto>();
                 cfg.CreateMap<Models.AccommodationDto, Entities.Accommodation>();
                 cfg.CreateMap<Models.MeritBadgeDto, Entities.MeritBadge>();
                 cfg.CreateMap<Models.ShirtSizeDto, Entities.ShirtSize>();
-                cfg.CreateMap<Entities.Accommodation, Models.AccommodationDto>();
-                cfg.CreateMap<Entities.MeritBadge, Models.MeritBadgeDto>();
 
                 cfg.CreateMap<Entities.Attendee, Models.AttendeeStubDto>();
                 cfg.CreateMap<Entities.Attendee, Models.AttendeeDto>().ConvertUsing<AttendeeToAttendeeDtoConverter>();
