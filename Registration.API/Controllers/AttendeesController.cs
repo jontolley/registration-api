@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Registration.API.Models;
 using Registration.API.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -117,6 +118,10 @@ namespace Registration.API.Controllers
             var shirtSize = _registrationRepository.GetShirtSizes().FirstOrDefault(ss => ss.Size == attendeeForCreationDto.ShirtSize);
             attendeeEntity.ShirtSize = shirtSize;
 
+            var user = _registrationRepository.GetUser(userIdentifier);
+            attendeeEntity.InsertedById = user.Id;
+            attendeeEntity.InsertedOn = DateTime.Now;
+
             _registrationRepository.AddAttendee(attendeeEntity);
 
             if (!_registrationRepository.Save())
@@ -167,6 +172,10 @@ namespace Registration.API.Controllers
             Mapper.Map(attendeeForUpdateDto, attendeeEntity);
             var shirtSize = _registrationRepository.GetShirtSizes().FirstOrDefault(ss => ss.Size == attendeeForUpdateDto.ShirtSize);
             attendeeEntity.ShirtSize = shirtSize;
+
+            var user = _registrationRepository.GetUser(userIdentifier);
+            attendeeEntity.UpdatedById = user.Id;
+            attendeeEntity.UpdatedOn = DateTime.Now;
 
             if (!_registrationRepository.Save())
             {

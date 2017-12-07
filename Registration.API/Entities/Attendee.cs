@@ -35,6 +35,17 @@ namespace Registration.API.Entities
         [Required]
         public ShirtSize ShirtSize { get; set; }
 
+        [Required]
+        public DateTime InsertedOn { get; set; }
+        [Required]
+        public int InsertedById { get; set; }
+        [Required]
+        public User InsertedBy { get; set; }
+
+        public DateTime? UpdatedOn { get; set; }
+        public int? UpdatedById { get; set; }
+        public User UpdatedBy { get; set; }
+
         public ICollection<AttendeeAccommodation> AttendeeAccommodations { get; set; }
                = new List<AttendeeAccommodation>();
 

@@ -215,6 +215,8 @@ namespace Registration.API.Services
         {
             return _context.Attendees
                 .Include(a => a.ShirtSize)
+                .Include(a => a.InsertedBy)
+                .Include(a => a.UpdatedBy)
                 .Include(a => a.AttendeeMeritBadges).ThenInclude(ab => ab.MeritBadge)
                 .Include(a => a.AttendeeAccommodations).ThenInclude(aa => aa.Accommodation)
                 .Where(a => a.SubgroupId == subgroupId);
@@ -224,6 +226,8 @@ namespace Registration.API.Services
         {
             return _context.Attendees
                 .Include(a => a.ShirtSize)
+                .Include(a => a.InsertedBy)
+                .Include(a => a.UpdatedBy)
                 .Include(a => a.AttendeeMeritBadges).ThenInclude(ab => ab.MeritBadge)
                 .Include(a => a.AttendeeAccommodations).ThenInclude(aa => aa.Accommodation)
                 .FirstOrDefault(a => a.SubgroupId == subgroupId && a.Id == attendeeId);

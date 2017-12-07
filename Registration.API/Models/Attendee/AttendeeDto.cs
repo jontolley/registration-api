@@ -14,6 +14,11 @@ namespace Registration.API.Models
         public bool Triathlon { get; set; }
         public string ShirtSize { get; set; }
 
+        public string InsertedBy { get; set; }
+        public DateTime InsertedOn { get; set; }
+        public string UpdatedBy { get; set; }
+        public DateTime? UpdatedOn { get; set; }
+
         public ICollection<AccommodationDto> Accommodations { get; set; }
 
         public ICollection<MeritBadgeDto> MeritBadges { get; set; }

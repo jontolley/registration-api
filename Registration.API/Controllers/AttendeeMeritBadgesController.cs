@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Registration.API.Entities;
 using Registration.API.Models;
 using Registration.API.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -100,6 +101,10 @@ namespace Registration.API.Controllers
                     SortOrder = sortOrder++
                 });
             }
+
+            var user = _registrationRepository.GetUser(userIdentifier);
+            attendeeEntity.UpdatedById = user.Id;
+            attendeeEntity.UpdatedOn = DateTime.Now;
 
             attendeeEntity.AttendeeMeritBadges = attendeeMeritBadges;
 

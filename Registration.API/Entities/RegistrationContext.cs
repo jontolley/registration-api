@@ -27,6 +27,20 @@ namespace Registration.API.Entities
             builder.Entity<ShirtSize>()
                  .HasIndex(u => u.Size)
                  .IsUnique();
+
+            builder.Entity<Attendee>()
+                .HasOne(a => a.InsertedBy)
+                .WithMany(u => u.InsertedAttendees)
+                .HasForeignKey(a => a.InsertedById)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Attendee>()
+                .HasOne(a => a.UpdatedBy)
+                .WithMany(u => u.UpdatedAttendees)
+                .HasForeignKey(a => a.UpdatedById)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            //    //.HasMany<Attendee>().WithOne(a => a.InsertedBy).HasForeignKey().OnDelete(DeleteBehavior.Restrict);
         }
 
         public DbSet<Accommodation> Accommodations { get; set; }

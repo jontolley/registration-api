@@ -44,6 +44,11 @@ namespace Registration.API.CustomDtoMapper
             attendeeDto.MeritBadges = meritBadges;
             attendeeDto.Accommodations = accommodations;
 
+            attendeeDto.InsertedBy = attendee.InsertedBy?.Name;
+            attendeeDto.InsertedOn = attendee.InsertedOn;
+            attendeeDto.UpdatedBy = attendee.UpdatedBy?.Name;
+            attendeeDto.UpdatedOn = attendee.UpdatedOn;
+
             return attendeeDto;
         }
     }
