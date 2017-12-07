@@ -30,5 +30,29 @@ namespace Registration.API.Services
             var user = _context.Users.Include(u => u.UserSubgroups).FirstOrDefault(u => u.SubscriberId == subscriberId);
             return user.UserSubgroups.Any(us => us.SubgroupId == subgroupId);
         }
+
+        #region Role methods
+        public Role GetRole(string role)
+        {
+            return _context.Roles.FirstOrDefault(r => r.Name == role);
+        }
+
+        public void AddRole(User user, Role role)
+        {
+            var roleAlreadyAssigned = _context.UserRoles.Any(ur => ur.UserId == user.Id && ur.RoleId == role.Id);
+            if (roleAlreadyAssigned) return;
+
+            user.UserRoles.Add(new UserRole { UserId = user.Id, RoleId = role.Id });
+        }
+
+        public void RemoveRole(User user, Role role)
+        {
+            var userRole = _context.UserRoles.FirstOrDefault(ur => ur.UserId == user.Id && ur.RoleId == role.Id);
+
+            if (userRole == null) return;
+
+            _context.UserRoles.Remove(userRole);
+        }
+        #endregion Role methods
     }
 }

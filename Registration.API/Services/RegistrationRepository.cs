@@ -170,30 +170,6 @@ namespace Registration.API.Services
         }
         #endregion User methods
 
-        #region Role methods
-        public Role GetRole(string role)
-        {
-            return _context.Roles.FirstOrDefault(r => r.Name == role);
-        }
-
-        public void AddRole(User user, Role role)
-        {
-            var roleAlreadyAssigned = _context.UserRoles.Any(ur => ur.UserId == user.Id && ur.RoleId == role.Id);
-            if (roleAlreadyAssigned) return;
-
-            user.UserRoles.Add(new UserRole { UserId = user.Id, RoleId = role.Id });
-        }
-
-        public void RemoveRole(User user, Role role)
-        {
-            var userRole = _context.UserRoles.FirstOrDefault(ur => ur.UserId == user.Id && ur.RoleId == role.Id);
-
-            if (userRole == null) return;
-            
-            _context.UserRoles.Remove(userRole);
-        }
-        #endregion Role methods
-
         #region Assignment methods
         public void AddAssignment(UserSubgroup userSubgroup)
         {
@@ -207,6 +183,15 @@ namespace Registration.API.Services
             {
                 _context.UserSubgroups.Remove(assignment);
             }            
+        }
+
+        public void RemoveAssignment(User user, int subgroupId)
+        {
+            var assignment = _context.UserSubgroups.FirstOrDefault(us => us.UserId == user.Id && us.SubgroupId == subgroupId);
+            if (assignment != null)
+            {
+                _context.UserSubgroups.Remove(assignment);
+            }
         }
         #endregion Assignment methods
 

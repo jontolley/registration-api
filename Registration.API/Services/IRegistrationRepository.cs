@@ -38,13 +38,10 @@ namespace Registration.API.Services
         User GetUser(string subscriberId, bool includeRoles = false, bool includeSubgroups = false);
         void AddUser(User user);
         void DeleteUser(User user);
-
-        Role GetRole(string role);
-        void AddRole(User user, Role role);
-        void RemoveRole(User user, Role role);
         
         void AddAssignment(UserSubgroup userSubgroup);
         void RemoveAllAssignments(User user);
+        void RemoveAssignment(User user, int subgroupId);
 
         IEnumerable<Contact> GetContacts();
         Contact GetContact(int Id);

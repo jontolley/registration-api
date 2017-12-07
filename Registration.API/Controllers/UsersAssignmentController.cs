@@ -5,6 +5,8 @@ using Registration.API.Entities;
 using Registration.API.Models;
 using Registration.API.Services;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Registration.API.Controllers
 {
@@ -24,7 +26,7 @@ namespace Registration.API.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult GetCurrentUser()
+        public IActionResult GetAssignment()
         {
             try
             {
@@ -52,9 +54,9 @@ namespace Registration.API.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult AssignUser([FromBody] UserSubgroupDto userSubgroupDto)
+        public IActionResult PostAssignment([FromBody] IEnumerable<SubgroupWithPinDto> subgroupWithPinDtos)
         {
-            if (userSubgroupDto == null)
+            if (subgroupWithPinDtos == null)
             {
                 return BadRequest();
             }
@@ -78,15 +80,10 @@ namespace Registration.API.Controllers
                     return NotFound();
                 }
 
-                if (user.SubscriberId != userSubgroupDto.SubscriberId)
-                {
-                    return BadRequest();
-                }
-
                 _registrationRepository.RemoveAllAssignments(user);
 
                 var hasAssignment = false;
-                foreach (var assignment in userSubgroupDto.Subgroups)
+                foreach (var assignment in subgroupWithPinDtos)
                 {
                     if (!_registrationRepository.CheckSubgroupPin(assignment.Id, assignment.Pin)) continue;
 
@@ -100,14 +97,14 @@ namespace Registration.API.Controllers
                     hasAssignment = true;
                 }
 
-                var role = _registrationRepository.GetRole(_userRoleName);
+                var role = _registrationAuthorizationService.GetRole(_userRoleName);
                 if (hasAssignment)
                 {
-                    _registrationRepository.AddRole(user, role);
+                    _registrationAuthorizationService.AddRole(user, role);
                 }
                 else
                 {
-                    _registrationRepository.RemoveRole(user, role);
+                    _registrationAuthorizationService.RemoveRole(user, role);
                 }
 
                 if (!_registrationRepository.Save())
@@ -125,6 +122,102 @@ namespace Registration.API.Controllers
             {
                 return StatusCode(500, "A problem happened while handling your request.");
             }
+        }
+
+        [Authorize]
+        [HttpPut]
+        public IActionResult PutAssignment([FromBody] SubgroupWithPinDto subgroupWithPinDto)
+        {
+            if (subgroupWithPinDto == null)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var userIdentifier = _registrationAuthorizationService.GetCurrentUserIdentifier(User);
+                if (userIdentifier == null)
+                {
+                    return BadRequest();
+                }
+
+                var user = _registrationRepository.GetUser(userIdentifier, includeRoles: false, includeSubgroups: true);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                if (_registrationRepository.CheckSubgroupPin(subgroupWithPinDto.Id, subgroupWithPinDto.Pin))
+                {
+                    // Check if assignment already exists, if it doesn't then add it.
+                    if (!user.UserSubgroups.Any(us => us.SubgroupId == subgroupWithPinDto.Id))
+                    {
+                        _registrationRepository.AddAssignment(new UserSubgroup
+                        {
+                            UserId = user.Id,
+                            SubgroupId = subgroupWithPinDto.Id
+                        });
+                    }                    
+                }
+                else
+                {
+                    return BadRequest();
+                }
+
+                var role = _registrationAuthorizationService.GetRole(_userRoleName);
+                _registrationAuthorizationService.AddRole(user, role);
+
+                if (!_registrationRepository.Save())
+                {
+                    return StatusCode(500, "A problem happened while handling your request.");
+                }
+
+                var savedUser = _registrationRepository.GetUser(user.Id, includeRoles: false, includeSubgroups: true);
+
+                var userToReturn = Mapper.Map<UserWithSubgroupsDto>(savedUser);
+
+                return Created("api/user/current", userToReturn);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "A problem happened while handling your request.");
+            }
+        }
+
+        [Authorize]
+        [HttpDelete("{subgroupId}")]
+        public IActionResult DeleteAssignment(int subgroupId)
+        {
+            var userIdentifier = _registrationAuthorizationService.GetCurrentUserIdentifier(User);
+            if (userIdentifier == null)
+            {
+                return BadRequest();
+            }
+
+            if (!_registrationAuthorizationService.IsAuthorized(userIdentifier, subgroupId))
+            {
+                return NotFound();
+            }
+
+            var user = _registrationRepository.GetUser(userIdentifier, includeRoles: false, includeSubgroups: true);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _registrationRepository.RemoveAssignment(user, subgroupId);
+
+            if (!_registrationRepository.Save())
+            {
+                return StatusCode(500, "A problem happened while handling your request.");
+            }
+
+            return NoContent();
         }
     }
 }
