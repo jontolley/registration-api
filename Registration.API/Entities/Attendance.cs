@@ -17,6 +17,8 @@ namespace Registration.API.Entities
         public bool Friday { get; set; }
         public bool Saturday { get; set; }
 
+        public int DaysAttending { get; set; }
+
         public ICollection<Attendee> AttendanceAttendees { get; set; }
                = new List<Attendee>();
     }

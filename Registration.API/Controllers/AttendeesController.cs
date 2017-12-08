@@ -115,8 +115,12 @@ namespace Registration.API.Controllers
             }
 
             var attendeeEntity = Mapper.Map<Entities.Attendee>(attendeeForCreationDto);
+
             var shirtSize = _registrationRepository.GetShirtSizes().FirstOrDefault(ss => ss.Size == attendeeForCreationDto.ShirtSize);
             attendeeEntity.ShirtSize = shirtSize;
+
+            var attendance = _registrationRepository.GetAttendance(attendeeForCreationDto.Attendance);
+            attendeeEntity.Attendance = attendance;
 
             var user = _registrationRepository.GetUser(userIdentifier);
             attendeeEntity.InsertedById = user.Id;
@@ -170,8 +174,12 @@ namespace Registration.API.Controllers
             }
 
             Mapper.Map(attendeeForUpdateDto, attendeeEntity);
+
             var shirtSize = _registrationRepository.GetShirtSizes().FirstOrDefault(ss => ss.Size == attendeeForUpdateDto.ShirtSize);
             attendeeEntity.ShirtSize = shirtSize;
+
+            var attendance = _registrationRepository.GetAttendance(attendeeForUpdateDto.Attendance);
+            attendeeEntity.Attendance = attendance;
 
             var user = _registrationRepository.GetUser(userIdentifier);
             attendeeEntity.UpdatedById = user.Id;

@@ -3,6 +3,7 @@ using Registration.API.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Registration.API.Models;
 
 namespace Registration.API.Services
 {
@@ -200,6 +201,7 @@ namespace Registration.API.Services
         {
             return _context.Attendees
                 .Include(a => a.ShirtSize)
+                .Include(a => a.Attendance)
                 .Include(a => a.InsertedBy)
                 .Include(a => a.UpdatedBy)
                 .Include(a => a.AttendeeMeritBadges).ThenInclude(ab => ab.MeritBadge)
@@ -211,6 +213,7 @@ namespace Registration.API.Services
         {
             return _context.Attendees
                 .Include(a => a.ShirtSize)
+                .Include(a => a.Attendance)
                 .Include(a => a.InsertedBy)
                 .Include(a => a.UpdatedBy)
                 .Include(a => a.AttendeeMeritBadges).ThenInclude(ab => ab.MeritBadge)
@@ -222,12 +225,6 @@ namespace Registration.API.Services
         {
             attendee.SubgroupId = attendee.SubgroupId == 0 ? attendee.Subgroup.Id : attendee.SubgroupId;
             attendee.Subgroup = null;
-
-            if (attendee.ShirtSize != null)
-            {
-                var shirtSize = _context.ShirtSizes.FirstOrDefault(s => s.Size == attendee.ShirtSize.Size);
-                attendee.ShirtSize = shirtSize;
-            }
 
             _context.Attendees.Add(attendee);
         }
@@ -265,6 +262,46 @@ namespace Registration.API.Services
         public IQueryable<Accommodation> GetAccommodations()
         {
             return _context.Accommodations.OrderBy(a => a.Name);
+        }
+
+        public Attendance GetAttendance(AttendanceForCreationDto attendanceForCreationDto)
+        {
+            var attendance = _context.Attendance.FirstOrDefault(a =>
+            a.Monday == attendanceForCreationDto.Monday &&
+            a.Tuesday == attendanceForCreationDto.Tuesday &&
+            a.Wednesday == attendanceForCreationDto.Wednesday &&
+            a.Thursday == attendanceForCreationDto.Thursday &&
+            a.Friday == attendanceForCreationDto.Friday &&
+            a.Saturday == attendanceForCreationDto.Saturday);
+
+            if (attendance == null)
+            {
+                var daysAttending = Convert.ToInt32(attendanceForCreationDto.Monday) +
+                    Convert.ToInt32(attendanceForCreationDto.Tuesday) +
+                    Convert.ToInt32(attendanceForCreationDto.Wednesday) +
+                    Convert.ToInt32(attendanceForCreationDto.Thursday) +
+                    Convert.ToInt32(attendanceForCreationDto.Friday) +
+                    Convert.ToInt32(attendanceForCreationDto.Saturday);
+
+                attendance = new Attendance
+                {
+                    Monday = attendanceForCreationDto.Monday,
+                    Tuesday = attendanceForCreationDto.Tuesday,
+                    Wednesday = attendanceForCreationDto.Wednesday,
+                    Thursday = attendanceForCreationDto.Thursday,
+                    Friday = attendanceForCreationDto.Friday,
+                    Saturday = attendanceForCreationDto.Saturday,
+                    DaysAttending = daysAttending
+                };
+
+                _context.Attendance.Add(attendance);
+            }
+            return attendance;
+        }
+
+        public IQueryable<Attendance> GetAllAttendance()
+        {
+            return _context.Attendance;
         }
         #endregion Support methods
 

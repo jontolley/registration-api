@@ -43,6 +43,7 @@ namespace Registration.API.CustomDtoMapper
             attendeeDto.ShirtSize = attendee.ShirtSize?.Size;
             attendeeDto.MeritBadges = meritBadges;
             attendeeDto.Accommodations = accommodations;
+            attendeeDto.Attendance = Mapper.Map<AttendanceDto>(attendee.Attendance);
 
             attendeeDto.InsertedBy = attendee.InsertedBy?.Name;
             attendeeDto.InsertedOn = attendee.InsertedOn;

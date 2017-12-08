@@ -22,5 +22,7 @@ namespace Registration.API.Models
         public ICollection<AccommodationDto> Accommodations { get; set; }
 
         public ICollection<MeritBadgeDto> MeritBadges { get; set; }
+
+        public AttendanceDto Attendance { get; set; }
     }
 }

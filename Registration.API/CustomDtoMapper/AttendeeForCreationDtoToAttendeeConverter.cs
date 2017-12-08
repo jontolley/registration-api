@@ -50,6 +50,7 @@ namespace Registration.API.CustomDtoMapper
             attendee.DateOfBirth = attendeeForCreationDto.DateOfBirth;
             attendee.Triathlon = attendeeForCreationDto.Triathlon;
             attendee.ShirtSize = shirtSize;
+            attendee.Attendance = Mapper.Map<Attendance>(attendeeForCreationDto.Attendance);
 
             attendee.AttendeeMeritBadges = attendeeMeritBadges;
             attendee.AttendeeAccommodations = attendeeAccommodations;

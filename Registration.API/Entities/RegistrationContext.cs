@@ -60,6 +60,7 @@ namespace Registration.API.Entities
         }
 
         public DbSet<Accommodation> Accommodations { get; set; }
+        public DbSet<Attendance> Attendance { get; set; }
         public DbSet<Attendee> Attendees { get; set; }
         public DbSet<AttendeeAccommodation> AttendeeAccommodations { get; set; }
         public DbSet<AttendeeMeritBadge> AttendeeMeritBadges { get; set; }

@@ -18,7 +18,8 @@ namespace Registration.API.CustomDtoMapper
             attendee.DateOfBirth = attendeeForUpdateDto.DateOfBirth;
             attendee.Triathlon = attendeeForUpdateDto.Triathlon;
             attendee.ShirtSize = shirtSize;
-            
+            attendee.Attendance = Mapper.Map<Attendance>(attendeeForUpdateDto.Attendance);
+
             return attendee;
         }
     }

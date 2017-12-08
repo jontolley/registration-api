@@ -1,6 +1,7 @@
 ﻿using Registration.API.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using Registration.API.Models;
 
 namespace Registration.API.Services
 {
@@ -50,6 +51,8 @@ namespace Registration.API.Services
         IQueryable<ShirtSize> GetShirtSizes();
         IQueryable<MeritBadge> GetMeritBadges();
         IQueryable<Accommodation> GetAccommodations();
+        Attendance GetAttendance(AttendanceForCreationDto attendanceForCreationDto);
+        IQueryable<Attendance> GetAllAttendance();
 
         bool Save();
     }

@@ -26,5 +26,8 @@ namespace Registration.API.Models
 
         [Required(ErrorMessage = "You must provide a Shrit Size.")]
         public string ShirtSize { get; set; }
+
+        [Required(ErrorMessage = "You must provide Attendance information.")]
+        public AttendanceForCreationDto Attendance { get; set; }
     }
 }
