@@ -40,7 +40,17 @@ namespace Registration.API.Entities
                 .HasForeignKey(a => a.UpdatedById)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //    //.HasMany<Attendee>().WithOne(a => a.InsertedBy).HasForeignKey().OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Attendee>()
+                .HasOne(a => a.ShirtSize)
+                .WithMany(u => u.ShirtSizeAttendees)
+                .HasForeignKey(a => a.ShirtSizeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Attendee>()
+                .HasOne(a => a.Attendance)
+                .WithMany(u => u.AttendanceAttendees)
+                .HasForeignKey(a => a.AttendanceId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public DbSet<Accommodation> Accommodations { get; set; }

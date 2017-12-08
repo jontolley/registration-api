@@ -33,7 +33,14 @@ namespace Registration.API.Entities
         public bool Triathlon { get; set; }
         
         [Required]
+        [ForeignKey("ShirtSizeId")]
         public ShirtSize ShirtSize { get; set; }
+        public int ShirtSizeId { get; set; }
+
+        [Required]
+        [ForeignKey("AttendanceId")]
+        public Attendance Attendance { get; set; }
+        public int AttendanceId { get; set; }
 
         [Required]
         public DateTime InsertedOn { get; set; }
