@@ -28,6 +28,12 @@ namespace Registration.API.Entities
                  .HasIndex(u => u.Size)
                  .IsUnique();
 
+            builder.Entity<Subgroup>()
+                .HasMany(a => a.Attendees)
+                .WithOne(u => u.Subgroup)
+                .HasForeignKey(a => a.SubgroupId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.Entity<Attendee>()
                 .HasOne(a => a.InsertedBy)
                 .WithMany(u => u.InsertedAttendees)
