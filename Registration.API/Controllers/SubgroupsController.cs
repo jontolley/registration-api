@@ -19,7 +19,7 @@ namespace Registration.API.Controllers
             _registrationRepository = registrationRepository;
         }
 
-        [Authorize(Policy = "User")]
+        [Authorize]
         [HttpGet("{groupId}/subgroups")]
         public IActionResult GetSubgroups(int groupId)
         {
@@ -41,7 +41,7 @@ namespace Registration.API.Controllers
             }
         }
 
-        [Authorize(Policy = "User")]
+        [Authorize]
         [HttpGet("{groupId}/subgroups/{id}", Name = "GetSubgroup")]
         public IActionResult GetSubgroup(int groupId, int id)
         {

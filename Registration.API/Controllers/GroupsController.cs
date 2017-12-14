@@ -18,7 +18,7 @@ namespace Registration.API.Controllers
             _registrationRepository = registrationRepository;
         }
 
-        [Authorize(Policy = "User")]
+        [Authorize]
         [HttpGet]
         public IActionResult GetGroups()
         {
@@ -28,7 +28,7 @@ namespace Registration.API.Controllers
             return Ok(groupDtos);
         }
 
-        [Authorize(Policy = "User")]
+        [Authorize]
         [HttpGet("{id}", Name = "GetGroup")]
         public IActionResult GetGroup(int id, bool includeSubgroups = false)
         {
