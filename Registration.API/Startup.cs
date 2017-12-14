@@ -53,10 +53,8 @@ namespace Registration.API
             {
                 options.AddPolicy("AllowSpecificOrigin",
                     builder => builder.WithOrigins(new[]{
-                        "http://authdemo.dev:4200",
                         "https://sunrise2018.org",
-                        "http://sunrise2018.org:4200",
-                        "http://encampment.dev:4200",
+                        "http://encampment.local:4200",
                         "https://encampment.azurewebsites.net" })
                     .AllowAnyMethod()
                     .AllowAnyHeader()
