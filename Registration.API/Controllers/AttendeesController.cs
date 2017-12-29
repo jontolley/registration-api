@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Registration.API.Entities;
 using Registration.API.Models;
 using Registration.API.Services;
 using System;
@@ -180,6 +181,36 @@ namespace Registration.API.Controllers
 
             var attendance = _registrationRepository.GetAttendance(attendeeForUpdateDto.Attendance);
             attendeeEntity.Attendance = attendance;
+
+            _registrationRepository.RemoveAllAccommodations(attendeeEntity);
+
+            var attendeeAccommodations = new List<AttendeeAccommodation>();
+            foreach (var accommodationDto in attendeeForUpdateDto.Accommodations)
+            {
+                attendeeAccommodations.Add(new AttendeeAccommodation
+                {
+                    AttendeeId = attendeeId,
+                    AccommodationId = accommodationDto.Id
+                });
+            }
+
+            attendeeEntity.AttendeeAccommodations = attendeeAccommodations;
+
+            _registrationRepository.RemoveAllMeritBadges(attendeeEntity);
+
+            var attendeeMeritBadges = new List<AttendeeMeritBadge>();
+            var sortOrder = 1;
+            foreach (var meritBadgeForCreationDto in attendeeForUpdateDto.MeritBadges)
+            {
+                attendeeMeritBadges.Add(new AttendeeMeritBadge
+                {
+                    AttendeeId = attendeeId,
+                    MeritBadgeId = meritBadgeForCreationDto.Id,
+                    SortOrder = sortOrder++
+                });
+            }
+
+            attendeeEntity.AttendeeMeritBadges = attendeeMeritBadges;
 
             var user = _registrationRepository.GetUser(userIdentifier);
             attendeeEntity.UpdatedById = user.Id;

@@ -100,12 +100,12 @@ namespace Registration.API.Controllers
                 });
             }
 
+            attendeeEntity.AttendeeAccommodations = attendeeAccommodations;
+
             var user = _registrationRepository.GetUser(userIdentifier);
             attendeeEntity.UpdatedById = user.Id;
             attendeeEntity.UpdatedOn = DateTime.Now;
-
-            attendeeEntity.AttendeeAccommodations = attendeeAccommodations;
-
+            
             if (!_registrationRepository.Save())
             {
                 return StatusCode(500, "A problem happened while handling your request.");

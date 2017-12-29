@@ -29,5 +29,9 @@ namespace Registration.API.Models
 
         [Required(ErrorMessage = "You must provide Attendance information.")]
         public AttendanceForCreationDto Attendance { get; set; }
+
+        public ICollection<AccommodationDto> Accommodations { get; set; }
+
+        public ICollection<MeritBadgeForCreationDto> MeritBadges { get; set; }
     }
 }

@@ -102,11 +102,11 @@ namespace Registration.API.Controllers
                 });
             }
 
+            attendeeEntity.AttendeeMeritBadges = attendeeMeritBadges;
+
             var user = _registrationRepository.GetUser(userIdentifier);
             attendeeEntity.UpdatedById = user.Id;
             attendeeEntity.UpdatedOn = DateTime.Now;
-
-            attendeeEntity.AttendeeMeritBadges = attendeeMeritBadges;
 
             if (!_registrationRepository.Save())
             {
