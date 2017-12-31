@@ -318,7 +318,7 @@ namespace Registration.API.Services
 
         public void AddContact(Contact contact)
         {
-            contact.ReceivedDateTime = DateTime.Now;
+            contact.ReceivedDateTime = DateTime.UtcNow;
             _context.Contacts.Add(contact);
         }
         #endregion Contact methods

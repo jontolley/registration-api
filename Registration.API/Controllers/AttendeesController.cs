@@ -125,7 +125,7 @@ namespace Registration.API.Controllers
 
             var user = _registrationRepository.GetUser(userIdentifier);
             attendeeEntity.InsertedById = user.Id;
-            attendeeEntity.InsertedOn = DateTime.Now;
+            attendeeEntity.InsertedOn = DateTime.UtcNow;
 
             _registrationRepository.AddAttendee(attendeeEntity);
 
@@ -214,7 +214,7 @@ namespace Registration.API.Controllers
 
             var user = _registrationRepository.GetUser(userIdentifier);
             attendeeEntity.UpdatedById = user.Id;
-            attendeeEntity.UpdatedOn = DateTime.Now;
+            attendeeEntity.UpdatedOn = DateTime.UtcNow;
 
             if (!_registrationRepository.Save())
             {
