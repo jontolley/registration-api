@@ -31,6 +31,7 @@ namespace Registration.API.Services
         void AddAttendee(Attendee attendee);
         void RemoveAllMeritBadges(Attendee attendee);
         void RemoveAllAccommodations(Attendee attendee);
+        void DeleteAttendee(Attendee attendee);
 
         bool UserExists(int userId);
         bool UserExists(string subscriberId);

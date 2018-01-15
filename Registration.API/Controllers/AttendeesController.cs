@@ -223,5 +223,25 @@ namespace Registration.API.Controllers
 
             return NoContent();
         }
+
+        [Authorize(Policy = "User")]
+        [HttpDelete("{groupId}/subgroups/{subgroupId}/attendees/{attendeeId}", Name = "DeleteAttendee")]
+        public IActionResult DeleteAttendee(int groupId, int subgroupId, int attendeeId)
+        {
+            var attendeeEntity = _registrationRepository.GetAttendee(subgroupId, attendeeId);
+            if (attendeeEntity == null)
+            {
+                return NotFound();
+            }
+
+            _registrationRepository.DeleteAttendee(attendeeEntity);
+
+            if (!_registrationRepository.Save())
+            {
+                return StatusCode(500, "A problem happened while handling your request.");
+            }
+
+            return NoContent();
+        }
     }
 }
