@@ -249,7 +249,6 @@ namespace Registration.API.Services
 
         public void DeleteAttendee(Attendee attendee)
         {
-            _context.Attendance.Remove(attendee.Attendance);
             _context.Attendees.Remove(attendee);
         }
         #endregion Attendee methods
