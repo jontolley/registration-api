@@ -31,6 +31,10 @@ namespace Registration.API.Entities
 
         [Required]
         public bool Triathlon { get; set; }
+
+        public bool IsWithMinor { get; set; }
+
+        public int Fee { get; set; }
         
         [Required]
         [ForeignKey("ShirtSizeId")]
