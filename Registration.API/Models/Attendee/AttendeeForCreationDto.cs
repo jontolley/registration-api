@@ -24,6 +24,8 @@ namespace Registration.API.Models
 
         public bool Triathlon { get; set; }
 
+        public bool IsWithMinor { get; set; }
+
         [Required(ErrorMessage = "You must provide a Shrit Size.")]
         public string ShirtSize { get; set; }
 

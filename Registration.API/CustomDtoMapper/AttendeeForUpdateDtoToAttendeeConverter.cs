@@ -17,6 +17,7 @@ namespace Registration.API.CustomDtoMapper
             attendee.IsAdult = attendeeForUpdateDto.IsAdult;
             attendee.DateOfBirth = attendeeForUpdateDto.DateOfBirth;
             attendee.Triathlon = attendeeForUpdateDto.Triathlon;
+            attendee.IsWithMinor = attendeeForUpdateDto.IsWithMinor;
             attendee.ShirtSize = shirtSize;
             attendee.Attendance = Mapper.Map<Attendance>(attendeeForUpdateDto.Attendance);
 

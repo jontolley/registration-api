@@ -12,6 +12,7 @@ namespace Registration.API.Models
         public bool IsAdult { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public bool Triathlon { get; set; }
+        public bool IsWithMinor { get; set; }
         public string ShirtSize { get; set; }
 
         public string InsertedBy { get; set; }
